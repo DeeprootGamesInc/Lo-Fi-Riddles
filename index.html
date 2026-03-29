@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>L O F I // P U Z Z L E S</title>
+    <title>Lo-Fi Riddles</title>
+    <link rel="icon" href="logo.ico" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;900&display=swap" rel="stylesheet">
@@ -21,89 +22,87 @@
 
         /* Subtle Grain Overlay */
         .grain-overlay {
-            position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.4;
+            position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.15;
+            mix-blend-mode: multiply;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
+        /* Weather Animations */
+        #weatherContainer {
+            position: fixed; inset: 0; z-index: 2; pointer-events: none; overflow: hidden;
+        }
+        .rain-drop {
+            position: absolute; width: 2px; height: 30px; background: rgba(100, 150, 255, 0.4);
+            animation: fall linear infinite;
+        }
+        .leaf {
+            position: absolute; width: 12px; height: 12px; background: #e89088; border-radius: 50% 0 50% 0;
+            opacity: 0.8; animation: leafFall linear infinite;
+        }
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+        @keyframes leafFall {
+            0% { transform: translateY(-10px) rotate(0deg) translateX(0px); }
+            50% { transform: translateY(50vh) rotate(180deg) translateX(50px); }
+            100% { transform: translateY(100vh) rotate(360deg) translateX(-50px); }
+        }
+
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Nunito', sans-serif;
-            touch-action: manipulation;
-            user-select: none;
-            overflow-x: hidden;
+            background-color: var(--bg-color); color: var(--text-color);
+            font-family: 'Nunito', sans-serif; touch-action: manipulation;
+            user-select: none; overflow-x: hidden; position: relative;
         }
 
         /* Toon / Lo-Fi UI */
         .lofi-box {
-            background-color: var(--panel-bg);
-            border: 4px solid var(--border-color);
-            border-radius: 16px;
-            box-shadow: 6px 6px 0px var(--border-color);
-            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            background-color: var(--panel-bg); border: 4px solid var(--border-color);
+            border-radius: 16px; box-shadow: 6px 6px 0px var(--border-color);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+            position: relative; z-index: 10;
         }
         
         .lofi-button {
-            background-color: var(--accent-color);
-            color: var(--text-color);
-            border: 4px solid var(--border-color);
-            border-radius: 12px;
-            box-shadow: 4px 4px 0px var(--border-color);
-            font-weight: 900;
-            transition: all 0.1s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
+            background-color: var(--accent-color); color: var(--text-color);
+            border: 4px solid var(--border-color); border-radius: 12px;
+            box-shadow: 4px 4px 0px var(--border-color); font-weight: 900;
+            transition: all 0.1s ease; text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer; position: relative; z-index: 10;
         }
         .lofi-button:active:not(:disabled) {
-            transform: translate(4px, 4px);
-            box-shadow: 0px 0px 0px var(--border-color);
+            transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--border-color);
         }
         .lofi-button:disabled {
-            background-color: #d1ccc1;
-            cursor: not-allowed;
-            transform: translate(4px, 4px);
-            box-shadow: 0px 0px 0px var(--border-color);
-            opacity: 0.8;
+            background-color: #d1ccc1; cursor: not-allowed;
+            transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--border-color); opacity: 0.8;
         }
 
         .btn-green { background-color: var(--exp-color); }
         .btn-yellow { background-color: var(--money-color); }
         .btn-ghost { background-color: #e8e4db; }
         .btn-dark { background-color: var(--border-color); color: white; }
+        .btn-white { background-color: white; color: var(--text-color); }
 
         /* Navigation Tabs */
         .nav-tab {
-            padding: 10px 14px;
-            font-weight: 900;
-            font-size: 0.85rem;
-            border: 4px solid transparent;
-            border-bottom: 4px solid var(--border-color);
-            cursor: pointer;
-            opacity: 0.5;
-            transition: all 0.2s;
-            color: var(--border-color);
+            padding: 10px 14px; font-weight: 900; font-size: 0.85rem;
+            border: 4px solid transparent; border-bottom: 4px solid var(--border-color);
+            cursor: pointer; opacity: 0.5; transition: all 0.2s;
+            color: var(--border-color); position: relative; z-index: 10;
         }
         .nav-tab.active {
-            opacity: 1;
-            border: 4px solid var(--border-color);
-            border-bottom: 4px solid var(--bg-color);
-            background: var(--bg-color);
-            border-radius: 12px 12px 0 0;
-            transform: translateY(4px);
+            opacity: 1; border: 4px solid var(--border-color);
+            border-bottom: 4px solid var(--bg-color); background: var(--bg-color);
+            border-radius: 12px 12px 0 0; transform: translateY(4px);
         }
 
         /* Puzzle Container */
         #puzzleContainer {
-            position: relative;
-            background-color: #d1ccc1;
-            border: 6px solid var(--border-color);
-            border-radius: 12px;
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
+            position: relative; background-color: #d1ccc1;
+            border: 6px solid var(--border-color); border-radius: 12px;
+            width: 100%; max-width: 600px; margin: 0 auto;
             box-shadow: 8px 8px 0px rgba(61, 49, 42, 0.15);
-            overflow: hidden;
+            overflow: hidden; z-index: 10;
         }
 
         .puzzle-piece {
@@ -111,32 +110,22 @@
             transition: left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
                         top 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
                         transform 0.2s ease, opacity 0.2s ease, filter 0.3s ease;
-            touch-action: none;
-            cursor: grab;
-            box-sizing: border-box;
-            /* Toon Shader base */
-            filter: contrast(1.05) saturate(1.15);
-            /* Усунення пропусків */
-            transform: scale(1.025);
+            touch-action: none; cursor: grab; box-sizing: border-box;
+            filter: contrast(1.05) saturate(1.15); transform: scale(1.025);
         }
 
         .puzzle-piece.placed { z-index: 5; }
         .puzzle-piece:active { cursor: grabbing; }
         
         .puzzle-piece.dragging {
-            transition: none;
-            z-index: 50;
-            transform: scale(1.1) rotate(-3deg);
+            transition: none; z-index: 50; transform: scale(1.1) rotate(-3deg);
             filter: contrast(1.15) saturate(1.2) drop-shadow(6px 6px 8px rgba(0,0,0,0.4));
         }
 
         .puzzle-piece.drop-target {
-            transform: scale(0.9);
-            opacity: 0.8;
-            filter: brightness(1.2);
+            transform: scale(0.9); opacity: 0.8; filter: brightness(1.2);
         }
 
-        /* Auto-lock Animation */
         @keyframes flashLock {
             0% { filter: brightness(2) contrast(1.2); transform: scale(1.08); z-index: 60; }
             50% { filter: brightness(1.5) contrast(1.1); transform: scale(1.05); }
@@ -144,18 +133,16 @@
         }
         .flash-lock { animation: flashLock 0.5s ease-out forwards; }
 
-        /* Overlays */
         #bgHintOverlay, #fullHintOverlay {
             position: absolute; inset: 0; width: 100%; height: 100%;
-            object-fit: cover; pointer-events: none;
+            object-fit: cover; pointer-events: none; image-rendering: high-quality;
         }
         #bgHintOverlay { opacity: 0; z-index: 1; transition: opacity 0.3s; }
         #fullHintOverlay { opacity: 0; z-index: 100; transition: opacity 0.2s; border-radius: 4px; }
 
-        /* Modals */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(61, 49, 42, 0.8);
-            backdrop-filter: blur(6px); z-index: 1000;
+            backdrop-filter: blur(6px); z-index: 2000;
             display: flex; align-items: center; justify-content: center; padding: 1rem;
         }
         
@@ -165,45 +152,58 @@
             background: white; color: var(--border-color);
         }
 
-        /* Polaroid Gallery */
         .polaroid {
-            background: white;
-            padding: 8px 8px 20px 8px;
-            border: 3px solid var(--border-color);
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
-            border-radius: 6px;
-            transform: rotate(calc(-3deg + 6deg * var(--rand)));
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
+            background: white; padding: 8px 8px 20px 8px;
+            border: 3px solid var(--border-color); box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+            border-radius: 6px; transform: rotate(calc(-3deg + 6deg * var(--rand)));
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+            cursor: pointer; position: relative; z-index: 10;
         }
         .polaroid:hover {
-            transform: scale(1.08) rotate(0deg);
-            box-shadow: 8px 8px 0px rgba(0,0,0,0.2);
-            z-index: 10;
+            transform: scale(1.08) rotate(0deg); box-shadow: 8px 8px 0px rgba(0,0,0,0.2); z-index: 20;
         }
 
         .avatar-img {
             width: 40px; height: 40px; border-radius: 50%;
             border: 3px solid var(--border-color); background: white;
         }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none; width: 100%; background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%;
+            background: var(--accent-color); cursor: pointer; border: 3px solid var(--border-color);
+            box-shadow: 2px 2px 0px var(--border-color); margin-top: -8px;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 8px; cursor: pointer; background: #e8e4db;
+            border-radius: 4px; border: 2px solid var(--border-color);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center">
 
-    <div class="grain-overlay"></div>
+    <!-- Preloader -->
+    <div id="preloader" class="fixed inset-0 bg-[#fdfbf7] z-[9999] flex flex-col items-center justify-center transition-opacity duration-1000">
+        <div id="preloaderText" class="text-3xl font-black text-[var(--border-color)] tracking-widest opacity-0 transition-opacity duration-1000">DEEPROOT GAMES</div>
+    </div>
 
-    <div id="announcementBanner" class="w-full hidden z-50 bg-[var(--accent-color)] text-[var(--border-color)] p-2 font-black text-center border-b-4 border-[var(--border-color)] text-sm shadow-md">
+    <div class="grain-overlay"></div>
+    <div id="weatherContainer"></div>
+
+    <div id="announcementBanner" class="w-full hidden z-50 bg-[var(--accent-color)] text-[var(--border-color)] p-2 font-black text-center border-b-4 border-[var(--border-color)] text-sm shadow-md relative">
         📢 <span id="announcementText">Welcome!</span>
     </div>
 
     <!-- Auth & Profile Overlay -->
-    <div id="authScreen" class="modal-overlay flex-col gap-4 z-[2000]">
-        <h1 class="text-4xl md:text-5xl font-black mb-4 text-white drop-shadow-md text-center">L O F I <br>// P U Z Z L E S</h1>
+    <div id="authScreen" class="modal-overlay flex-col gap-4 z-[3000]">
+        <h1 class="text-4xl md:text-5xl font-black mb-4 text-white drop-shadow-md text-center">LO-FI <br>RIDDLES</h1>
         <div class="lofi-box p-8 flex flex-col gap-5 max-w-sm w-full text-center">
             
-            <!-- Step 1: Login -->
             <div id="authStep1" class="flex flex-col gap-4">
-                <p class="font-bold text-gray-600 mb-2">Save your progress & collect art.</p>
+                <p class="font-bold text-gray-600 mb-2">Save your progress & trade on the market.</p>
                 <button id="btnGoogleLogin" class="lofi-button btn-ghost py-3 flex items-center justify-center gap-3">
                     <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
                     Google Sign In
@@ -214,7 +214,6 @@
                 <button id="btnGuestLogin" class="lofi-button py-3">Play as Guest</button>
             </div>
 
-            <!-- Step 2: Set Nickname -->
             <div id="authStep2" class="hidden flex-col gap-4">
                 <p class="font-bold text-[var(--border-color)]">Choose your identity</p>
                 <img id="previewAvatar" src="https://api.dicebear.com/7.x/micah/svg?seed=Guest" class="w-24 h-24 mx-auto rounded-full border-4 border-[var(--border-color)] bg-gray-100">
@@ -227,7 +226,7 @@
     </div>
 
     <!-- Header / User Profile Bar -->
-    <div class="w-full max-w-[600px] px-4 pt-6 pb-2 z-10 relative">
+    <div class="w-full max-w-[600px] px-4 pt-6 pb-2 z-20 relative">
         <div class="flex justify-between items-center mb-4 bg-white border-4 border-[var(--border-color)] rounded-2xl p-2 shadow-[4px_4px_0px_#3d312a]">
             <div class="flex items-center gap-3">
                 <img id="userAvatar" src="" class="avatar-img">
@@ -250,7 +249,8 @@
 
         <!-- Navigation -->
         <div class="flex gap-1 border-b-4 border-[var(--border-color)] overflow-x-auto scrollbar-hide pt-2" id="mainNav">
-            <div class="nav-tab active" data-target="viewPublic">PUBLIC</div>
+            <div class="nav-tab active" data-target="viewPublic">DROPS</div>
+            <div class="nav-tab text-[#e53935]" data-target="viewMarket">MARKET</div>
             <div class="nav-tab" data-target="viewLibrary">LIBRARY</div>
             <div class="nav-tab" data-target="viewHub">CRAFT</div>
             <div class="nav-tab" data-target="viewQuests">QUESTS</div>
@@ -261,7 +261,7 @@
     </div>
 
     <!-- MAIN CONTENT VIEWS -->
-    <div class="w-full max-w-[600px] px-4 pb-6 flex-grow flex flex-col relative z-10">
+    <div class="w-full max-w-[600px] px-4 pb-6 flex-grow flex flex-col relative z-20">
 
         <!-- VIEW: PUBLIC PUZZLES -->
         <div id="viewPublic" class="view-section flex flex-col gap-4 mt-4">
@@ -270,7 +270,18 @@
                 <p class="text-xs text-gray-500 font-bold">Limited time official drops. Unlock to keep forever.</p>
             </div>
             <div id="publicPuzzlesGrid" class="flex flex-col gap-4">
-                <div class="text-center font-bold text-gray-400 py-6">Loading public puzzles...</div>
+                <div class="text-center font-bold text-gray-400 py-6">Loading public drops...</div>
+            </div>
+        </div>
+
+        <!-- VIEW: MARKET (Player Trading) -->
+        <div id="viewMarket" class="view-section hidden flex flex-col gap-4 mt-4">
+            <div class="lofi-box p-4 bg-yellow-50 border-[var(--money-color)] mb-2">
+                <h2 class="font-black text-lg text-yellow-800">PLAYER MARKET</h2>
+                <p class="text-xs text-yellow-700 font-bold">Buy unique art or unfinished puzzles from other players in real-time.</p>
+            </div>
+            <div id="marketGrid" class="grid grid-cols-2 gap-4">
+                <div class="text-center font-bold text-gray-400 py-6 col-span-2">Loading market...</div>
             </div>
         </div>
 
@@ -307,6 +318,7 @@
         <div id="viewShop" class="view-section hidden flex flex-col gap-4 mt-4">
             <div class="lofi-box p-5">
                 <h2 class="font-black text-xl mb-3 flex items-center gap-2">📻 MUSIC STORE</h2>
+                <div class="text-[0.65rem] text-gray-500 mb-2 font-bold uppercase tracking-widest">Buy real MP3 tracks & Weather Effects</div>
                 <div id="trackList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-2"></div>
             </div>
             <div class="lofi-box p-5">
@@ -342,13 +354,22 @@
 
                 <div class="mb-5 border-b-4 border-red-200 pb-5">
                     <h3 class="font-black text-sm mb-2">2. Publish Official Puzzle</h3>
-                    <input type="text" id="adminPuzImg" placeholder="Image URL..." class="w-full p-2 border-4 border-gray-300 rounded-lg mb-2 font-bold text-sm">
+                    
+                    <div class="flex items-center gap-2 mb-2">
+                        <input type="text" id="adminPuzImg" placeholder="Image URL..." class="w-full p-2 border-4 border-gray-300 rounded-lg font-bold text-sm">
+                        <span class="font-black text-xs text-gray-500">OR</span>
+                        <input type="file" id="adminPuzFile" accept="image/*" class="w-full text-[0.65rem] font-bold text-gray-500 file:py-1 file:px-2 file:rounded-lg file:border-2 file:border-gray-300 file:bg-white cursor-pointer">
+                    </div>
+                    
                     <input type="text" id="adminPuzTitle" placeholder="Puzzle Title..." class="w-full p-2 border-4 border-gray-300 rounded-lg mb-2 font-bold text-sm">
                     <div class="grid grid-cols-2 gap-2 mb-2">
                         <input type="number" id="adminPuzReward" placeholder="Reward (e.g. 50)" class="w-full p-2 border-4 border-gray-300 rounded-lg font-bold text-sm">
                         <input type="number" id="adminPuzPrice" placeholder="Unlock Price (Coins)" class="w-full p-2 border-4 border-gray-300 rounded-lg font-bold text-sm">
                     </div>
-                    <input type="number" id="adminPuzExpiry" placeholder="Expires in (Hours) - Optional" class="w-full p-2 border-4 border-gray-300 rounded-lg mb-2 font-bold text-sm">
+                    <div class="grid grid-cols-2 gap-2 mb-2">
+                        <input type="number" id="adminPuzExpiry" placeholder="Expires in (Hours)" class="w-full p-2 border-4 border-gray-300 rounded-lg font-bold text-sm">
+                        <input type="number" id="adminPuzGrid" placeholder="Req Grid (e.g. 10)" class="w-full p-2 border-4 border-gray-300 rounded-lg font-bold text-sm">
+                    </div>
                     <button onclick="window.adminPublishPuzzle()" class="lofi-button btn-dark px-4 py-2 text-xs w-full">Publish Puzzle</button>
                 </div>
 
@@ -369,9 +390,12 @@
                 <button onclick="window.closeSetupMode()" class="lofi-button btn-ghost px-3 py-1 text-sm">✕</button>
             </div>
 
-            <div id="continueContainer" class="hidden flex-col gap-2 p-4 bg-yellow-50 border-4 border-[var(--money-color)] rounded-xl">
+            <div id="continueContainer" class="hidden flex-col gap-2 p-4 bg-yellow-50 border-4 border-[var(--money-color)] rounded-xl relative">
                 <div class="text-sm font-black text-yellow-800 text-center">💾 Unfinished puzzle found!</div>
-                <button id="continueBtn" class="lofi-button btn-yellow py-2 px-4 text-sm w-full">RESUME GAME</button>
+                <div class="grid grid-cols-2 gap-2 mt-1">
+                    <button id="continueBtn" class="lofi-button btn-yellow py-2 px-2 text-xs">RESUME</button>
+                    <button onclick="window.sellUnfinishedGame()" class="lofi-button bg-orange-400 text-white py-2 px-2 text-xs">SELL ON MARKET</button>
+                </div>
             </div>
 
             <div>
@@ -389,10 +413,12 @@
 
             <div class="grid grid-cols-2 gap-4 mt-2">
                 <div>
-                    <label class="block text-xs font-black mb-1 text-gray-600">GRID SIZE</label>
-                    <!-- Changed to Input for custom sizes up to 100 -->
-                    <input type="number" id="gridInput" value="4" min="2" max="100" class="w-full p-2 border-4 border-[var(--border-color)] rounded-xl bg-white text-sm font-black text-center focus:outline-none focus:border-[var(--accent-color)]">
-                    <div class="text-[0.6rem] font-bold text-gray-400 text-center mt-1">Max 100x100</div>
+                    <label class="block text-xs font-black mb-1 text-gray-600">GRID SIZE: <span id="gridDisplayVal" class="text-[var(--accent-color)]">4x4</span></label>
+                    <div class="flex items-center gap-2">
+                        <input type="range" id="gridSlider" min="2" max="20" value="4" class="flex-grow">
+                        <input type="number" id="gridInput" value="4" min="2" max="100" class="w-16 p-1 border-4 border-[var(--border-color)] rounded bg-white text-xs font-black text-center" title="Custom up to 100">
+                    </div>
+                    <div class="text-[0.6rem] font-bold text-gray-400 text-center mt-1">Total pieces: <span id="piecesCountDisplay">16</span></div>
                 </div>
                 <div>
                     <label class="block text-xs font-black mb-1 text-gray-600">SHAPE</label>
@@ -454,7 +480,7 @@
             <div class="lofi-box p-3 bg-white flex items-center justify-between text-xs font-black mt-auto rounded-xl">
                 <div class="flex items-center gap-2">
                     <span class="animate-pulse text-xl">📻</span>
-                    <span id="nowPlayingText">Track: Chill Vibes</span>
+                    <span id="nowPlayingText">Track: 1. Rainy Days</span>
                 </div>
                 <button onclick="window.audioPlayer.nextTrack()" class="px-3 py-1 border-2 border-[var(--border-color)] bg-gray-100 rounded-lg hover:bg-gray-200 uppercase">NEXT ⏭</button>
             </div>
@@ -474,9 +500,25 @@
                 <div class="bg-gray-100 p-2 rounded-lg border-2 border-gray-200">Size: <span id="libModalSize" class="text-[var(--accent-color)]"></span></div>
                 <div class="bg-gray-100 p-2 rounded-lg border-2 border-gray-200">Shape: <span id="libModalShape" class="text-[var(--accent-color)]"></span></div>
             </div>
-            <button id="libModalReplayBtn" class="lofi-button py-3 text-lg mt-2 flex justify-center items-center gap-2">
-                <span>🔄</span> REPLAY PUZZLE
-            </button>
+            <div class="grid grid-cols-2 gap-2 mt-2">
+                <button id="libModalReplayBtn" class="lofi-button py-3 text-sm flex justify-center items-center gap-1">
+                    🔄 REPLAY
+                </button>
+                <button id="libModalSellBtn" class="lofi-button bg-orange-400 text-white py-3 text-sm flex justify-center items-center gap-1">
+                    💰 SELL
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sell Modal -->
+    <div id="sellModal" class="modal-overlay hidden z-[3000]">
+        <div class="lofi-box p-6 max-w-sm w-full bg-white flex flex-col gap-4 relative text-center">
+            <button onclick="document.getElementById('sellModal').classList.add('hidden')" class="absolute top-2 right-2 text-xl font-black px-2">✕</button>
+            <h2 class="font-black text-xl border-b-4 border-gray-100 pb-2">SELL ON MARKET</h2>
+            <p class="text-xs font-bold text-gray-500">Set a price for this puzzle. Once sold, it will be transferred to the buyer.</p>
+            <input type="number" id="sellPriceInput" placeholder="Price in Coins (e.g. 500)" class="w-full p-3 border-4 border-[var(--border-color)] rounded-xl font-black text-center text-lg focus:outline-none focus:border-[var(--accent-color)]">
+            <button id="confirmSellBtn" class="lofi-button btn-green py-3">LIST ON MARKET</button>
         </div>
     </div>
 
@@ -513,7 +555,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAg3VYTTAaE1xMzOrTEONG7jms9z04NAlk",
@@ -531,24 +573,18 @@
         let currentUser = null;
 
         let playerProfile = {
-            name: "", coins: 0, exp: 0, level: 1, role: "player",
-            avatarUrl: "",
+            name: "", coins: 0, exp: 0, level: 1, role: "player", avatarUrl: "",
             unlockedTracks: [0], playlist: [0], unlockedPacks: [], unlockedPuzzles: [],
             collection: [], completedQuests: [], hexWins: 0
         };
 
+        // Real MP3 Tracks Configuration
         const TRACKS_DB = [
-            { id: 0, name: "Rainy Days", price: 0, chord: [440, 523, 659] },
-            { id: 1, name: "Midnight Coffee", price: 500, chord: [349, 440, 523] },
-            { id: 2, name: "Neon Lights", price: 1000, chord: [392, 493, 587] },
-            { id: 3, name: "Sunset Study", price: 1500, chord: [261, 329, 392] },
-            { id: 4, name: "City View", price: 2000, chord: [329, 392, 493] },
-            { id: 5, name: "Cassette Tape", price: 2500, chord: [293, 349, 440] },
-            { id: 6, name: "Subway Ride", price: 3000, chord: [493, 587, 739] },
-            { id: 7, name: "Autumn Leaves", price: 4000, chord: [415, 523, 622] },
-            { id: 8, name: "Empty Room", price: 5000, chord: [277, 329, 415] },
-            { id: 9, name: "VHS Dreams", price: 7500, chord: [311, 392, 466] },
-            { id: 10, name: "Lofi Master", price: 10000, chord: [466, 587, 698] }
+            { id: 0, name: "Rainy Days", price: 0, url: "music/rainy_days.mp3", fx: "rain" },
+            { id: 1, name: "Midnight Coffee", price: 500, url: "music/midnight_coffee.mp3", fx: "none" },
+            { id: 2, name: "Autumn Leaves", price: 1000, url: "music/autumn_leaves.mp3", fx: "leaves" },
+            { id: 3, name: "VHS Dreams", price: 1500, url: "music/vhs_dreams.mp3", fx: "none" }
+            // Add more entries here as you generate mp3 files
         ];
 
         const QUESTS_DB = [
@@ -564,6 +600,127 @@
             "https://picsum.photos/seed/shards2/300/400",
             "https://picsum.photos/seed/shards3/400/400"
         ];
+
+        // --- PRELOADER LOGIC ---
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            const preloaderText = document.getElementById('preloaderText');
+            
+            setTimeout(() => { preloaderText.style.opacity = '1'; }, 500); // Fade in Deeproot
+            setTimeout(() => { preloaderText.style.opacity = '0'; }, 2000); // Fade out Deeproot
+            setTimeout(() => { 
+                preloaderText.textContent = "LO-FI RIDDLES"; 
+                preloaderText.style.opacity = '1'; 
+            }, 3000); // Fade in Lo-fi
+            setTimeout(() => { preloaderText.style.opacity = '0'; }, 4500); // Fade out Lo-fi
+            setTimeout(() => { preloader.style.opacity = '0'; }, 5000); // Fade out BG
+            setTimeout(() => { preloader.remove(); }, 6000); // Remove DOM
+        });
+
+
+        // --- AUDIO ENGINE (Crossfader) ---
+        window.audioPlayer = {
+            audio1: new Audio(), audio2: new Audio(), active: 1,
+            isPlaying: false, currentIdx: 0, fadeInterval: null,
+            init() {
+                this.audio1.loop = true; this.audio2.loop = true;
+                this.audio1.volume = 1; this.audio2.volume = 0;
+                // Preload fallback for synthesizing if MP3 missing
+                this.audio1.onerror = () => { console.warn("MP3 not found, falling back to silent/synth if implemented."); }
+            },
+            start() {
+                if(this.isPlaying) return; this.isPlaying = true;
+                if(playerProfile.playlist.length === 0) return;
+                this.playCurrent();
+            },
+            stop() {
+                this.isPlaying = false;
+                this.audio1.pause(); this.audio2.pause();
+                clearInterval(this.fadeInterval);
+            },
+            nextTrack() {
+                if(playerProfile.playlist.length === 0) return;
+                this.currentIdx = (this.currentIdx + 1) % playerProfile.playlist.length;
+                if(this.isPlaying) this.crossfadeToCurrent();
+            },
+            playCurrent() {
+                const tId = playerProfile.playlist[this.currentIdx] || 0;
+                const track = TRACKS_DB.find(t=>t.id===tId) || TRACKS_DB[0];
+                document.getElementById('nowPlayingText').textContent = `Track: ${track.name}`;
+                this.setWeather(track.fx);
+                
+                const activeAudio = this.active === 1 ? this.audio1 : this.audio2;
+                activeAudio.src = track.url;
+                activeAudio.volume = 1;
+                activeAudio.play().catch(e => console.log("Audio play blocked (needs user interaction first)"));
+            },
+            crossfadeToCurrent() {
+                const tId = playerProfile.playlist[this.currentIdx] || 0;
+                const track = TRACKS_DB.find(t=>t.id===tId) || TRACKS_DB[0];
+                document.getElementById('nowPlayingText').textContent = `Track: ${track.name}`;
+                this.setWeather(track.fx);
+
+                const oldAudio = this.active === 1 ? this.audio1 : this.audio2;
+                this.active = this.active === 1 ? 2 : 1;
+                const newAudio = this.active === 1 ? this.audio1 : this.audio2;
+
+                newAudio.src = track.url;
+                newAudio.volume = 0;
+                newAudio.play().catch(e => console.log("Audio play blocked"));
+
+                clearInterval(this.fadeInterval);
+                let vol = 0;
+                this.fadeInterval = setInterval(() => {
+                    vol += 0.05;
+                    if(vol >= 1) {
+                        vol = 1; clearInterval(this.fadeInterval);
+                        oldAudio.pause();
+                    }
+                    newAudio.volume = vol;
+                    oldAudio.volume = 1 - vol;
+                }, 100);
+            },
+            setWeather(fx) {
+                const container = document.getElementById('weatherContainer');
+                container.innerHTML = '';
+                if(fx === 'rain') {
+                    for(let i=0; i<50; i++) {
+                        let drop = document.createElement('div'); drop.className = 'rain-drop';
+                        drop.style.left = `${Math.random()*100}vw`; drop.style.top = `-${Math.random()*20}vh`;
+                        drop.style.animationDuration = `${0.5 + Math.random()*0.5}s`;
+                        container.appendChild(drop);
+                    }
+                } else if (fx === 'leaves') {
+                    for(let i=0; i<20; i++) {
+                        let leaf = document.createElement('div'); leaf.className = 'leaf';
+                        leaf.style.left = `${Math.random()*100}vw`; leaf.style.top = `-${Math.random()*20}vh`;
+                        leaf.style.animationDuration = `${5 + Math.random()*5}s`;
+                        leaf.style.animationDelay = `${Math.random()*5}s`;
+                        container.appendChild(leaf);
+                    }
+                }
+            }
+        };
+        window.audioPlayer.init();
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSfx(type) {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); const now = audioCtx.currentTime;
+            if (type === 'click' || type === 'drop') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+                gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(now + 0.1);
+            } else if (type === 'lock') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now); osc.frequency.setValueAtTime(659.25, now+0.1);
+                gain.gain.setValueAtTime(0, now); gain.gain.linearRampToValueAtTime(0.15, now+0.05); gain.gain.exponentialRampToValueAtTime(0.01, now+0.3);
+                osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(now+0.3);
+            } else if (type === 'win') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(523, now);
+                gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now+1);
+                osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(now+1);
+            }
+        }
 
         // --- AUTH LOGIC ---
         const authScreen = document.getElementById('authScreen');
@@ -582,7 +739,6 @@
 
         document.getElementById('btnSignOut').addEventListener('click', () => { signOut(auth); });
 
-        // Nickname logic
         document.getElementById('nicknameInput').addEventListener('input', (e) => {
             const val = e.target.value.trim() || 'Guest';
             document.getElementById('previewAvatar').src = `https://api.dicebear.com/7.x/micah/svg?seed=${val}&backgroundColor=fdfbf7`;
@@ -595,8 +751,7 @@
             playerProfile.avatarUrl = `https://api.dicebear.com/7.x/micah/svg?seed=${nick}&backgroundColor=fdfbf7`;
             await saveProfile();
             authScreen.classList.add('hidden');
-            setupRealtimeListeners();
-            refreshUI();
+            setupRealtimeListeners(); refreshUI();
         });
 
         onAuthStateChanged(auth, async (user) => {
@@ -618,16 +773,12 @@
             if (!currentUser || !db) return;
             const profileRef = doc(db, 'users', currentUser.uid);
             const snap = await getDoc(profileRef);
-            
             if (snap.exists() && snap.data().name) {
                 playerProfile = { ...playerProfile, ...snap.data() };
                 if(!playerProfile.unlockedPuzzles) playerProfile.unlockedPuzzles = [];
                 authScreen.classList.add('hidden');
-                setupRealtimeListeners();
-                updateLeaderboardStats();
-                refreshUI();
+                setupRealtimeListeners(); updateLeaderboardStats(); refreshUI();
             } else {
-                // User needs to set nickname
                 document.getElementById('authStep1').classList.add('hidden');
                 document.getElementById('authStep2').classList.remove('hidden');
                 document.getElementById('nicknameInput').value = currentUser.displayName || "";
@@ -647,9 +798,7 @@
         async function updateLeaderboardStats() {
             if (!currentUser || !db || !playerProfile.name) return;
             const lbRef = doc(db, 'public_data', 'leaderboard', 'users', currentUser.uid);
-            await setDoc(lbRef, {
-                name: playerProfile.name, exp: playerProfile.exp, level: playerProfile.level, avatarUrl: playerProfile.avatarUrl
-            }, { merge: true });
+            await setDoc(lbRef, { name: playerProfile.name, exp: playerProfile.exp, level: playerProfile.level, avatarUrl: playerProfile.avatarUrl }, { merge: true });
         }
 
         function setupRealtimeListeners() {
@@ -660,56 +809,75 @@
                 const banner = document.getElementById('announcementBanner');
                 if(!snap.empty) {
                     let latest = snap.docs[snap.docs.length-1].data();
-                    document.getElementById('announcementText').textContent = latest.text;
-                    banner.classList.remove('hidden');
+                    document.getElementById('announcementText').textContent = latest.text; banner.classList.remove('hidden');
                 } else banner.classList.add('hidden');
             });
 
-            // Public Puzzles with Expiry logic
+            // Public Puzzles
             onSnapshot(collection(db, 'puzzles'), (snap) => {
-                const grid = document.getElementById('publicPuzzlesGrid');
-                grid.innerHTML = '';
+                const grid = document.getElementById('publicPuzzlesGrid'); grid.innerHTML = '';
                 let hasActive = false;
-                
                 snap.forEach(d => {
                     const data = d.data(); const pId = d.id;
-                    // Check Expiry
-                    if (data.expiresAt && Date.now() > data.expiresAt) return; // Skip expired
+                    if (data.expiresAt && Date.now() > data.expiresAt) return; 
                     hasActive = true;
-
                     const isUnlocked = data.price === 0 || playerProfile.unlockedPuzzles.includes(pId);
-                    const timeStr = data.expiresAt ? `<div class="text-[0.6rem] text-red-500 font-black animate-pulse">Expires soon!</div>` : '';
-                    
+                    const timeStr = data.expiresAt ? `<div class="text-[0.65rem] text-red-500 font-black animate-pulse bg-red-50 px-2 py-1 rounded inline-block mt-1">⏳ EXPIRES SOON!</div>` : '';
+                    const sizeStr = data.forcedGridSize ? `${data.forcedGridSize}x${data.forcedGridSize}` : '4x4 (Default)';
+
                     grid.innerHTML += `
                         <div class="lofi-box p-4 bg-white flex justify-between items-center cursor-pointer hover:scale-[1.02] transition-transform" 
-                             onclick="window.playPublicPuzzle('${pId}', '${data.imageUrl}', ${data.baseValue}, ${data.price || 0}, ${isUnlocked})">
+                             onclick="window.playPublicPuzzle('${pId}', '${data.imageUrl}', ${data.baseValue}, ${data.price || 0}, ${isUnlocked}, ${data.forcedGridSize || 4})">
                             <div class="flex items-center gap-4">
                                 <img src="${data.imageUrl}" class="w-16 h-16 object-cover rounded-xl border-4 border-[var(--border-color)] shadow-[2px_2px_0px_#3d312a]">
                                 <div class="flex flex-col">
                                     <div class="font-black text-md leading-tight">${data.title}</div>
-                                    <div class="text-xs font-bold text-[var(--accent-color)] mt-1">Reward: ${data.baseValue} 🪙</div>
+                                    <div class="text-xs font-bold text-[var(--accent-color)] mt-1">Reward: ${data.baseValue} 🪙 | Grid: ${sizeStr}</div>
                                     ${timeStr}
                                 </div>
                             </div>
-                            <div>
-                                ${isUnlocked ? '<span class="text-3xl drop-shadow-md">▶</span>' : `<button class="lofi-button btn-yellow px-3 py-2 text-sm font-black shadow-[2px_2px_0px_#3d312a]">${data.price}🪙</button>`}
-                            </div>
+                            <div>${isUnlocked ? '<span class="text-3xl drop-shadow-md">▶</span>' : `<button class="lofi-button btn-yellow px-3 py-2 text-sm font-black shadow-[2px_2px_0px_#3d312a]">${data.price}🪙</button>`}</div>
                         </div>
                     `;
                 });
                 if(!hasActive) grid.innerHTML = '<div class="text-center font-bold text-gray-400 py-6">No active drops. Check back later!</div>';
             });
 
-            // Leaderboard
-            onSnapshot(collection(db, 'public_data', 'leaderboard', 'users'), (snap) => {
-                let players = []; snap.forEach(d => players.push(d.data()));
-                players.sort((a,b) => b.exp - a.exp);
+            // Marketplace
+            onSnapshot(collection(db, 'market'), (snap) => {
+                const grid = document.getElementById('marketGrid'); grid.innerHTML = '';
+                if(snap.empty) { grid.innerHTML = '<div class="text-center font-bold text-gray-400 py-6 col-span-2">Market is quiet right now.</div>'; return; }
                 
+                snap.forEach(d => {
+                    const data = d.data(); const mId = d.id;
+                    const isMine = data.sellerId === currentUser.uid;
+                    const imgPreview = data.item.img || data.item.imageSrc; // handles complete or incomplete state images
+                    const sizeText = data.item.state ? "UNFINISHED" : "COMPLETED";
+                    
+                    grid.innerHTML += `
+                        <div class="lofi-box p-3 bg-white flex flex-col justify-between items-center shadow-[4px_4px_0px_rgba(0,0,0,0.1)]">
+                            <img src="${imgPreview}" class="w-full aspect-square object-cover rounded-lg border-2 border-gray-200 mb-2">
+                            <div class="w-full flex justify-between items-center text-xs font-black mb-2">
+                                <span class="text-gray-500 truncate mr-2">@${data.seller}</span>
+                                <span class="text-orange-500">${sizeText}</span>
+                            </div>
+                            ${isMine ? 
+                                `<button onclick="window.removeMarketItem('${mId}')" class="lofi-button btn-ghost w-full py-1 text-xs">REMOVE</button>` : 
+                                `<button onclick="window.buyMarketItem('${mId}', ${data.price})" class="lofi-button btn-yellow w-full py-1 text-xs shadow-sm">BUY ${data.price}🪙</button>`
+                            }
+                        </div>
+                    `;
+                });
+            });
+
+            // Leaderboard & Artpacks (Standard listeners)
+            onSnapshot(collection(db, 'public_data', 'leaderboard', 'users'), (snap) => {
+                let players = []; snap.forEach(d => players.push(d.data())); players.sort((a,b) => b.exp - a.exp);
                 const list = document.getElementById('leaderboardList'); list.innerHTML = '';
                 players.slice(0, 50).forEach((p, i) => {
                     const isMe = p.name === playerProfile.name;
                     list.innerHTML += `
-                        <div class="flex justify-between items-center p-3 border-b-4 border-gray-100 ${isMe?'bg-blue-50':''} text-sm">
+                        <div class="flex justify-between items-center p-3 border-b-4 border-gray-100 ${isMe?'bg-[#e8f5e9]':''} text-sm">
                             <div class="flex items-center gap-3">
                                 <span class="text-gray-400 w-4 font-black">${i+1}.</span>
                                 <img src="${p.avatarUrl || `https://api.dicebear.com/7.x/micah/svg?seed=${p.name}`}" class="w-8 h-8 rounded-full border-2 border-[var(--border-color)] bg-white">
@@ -721,21 +889,15 @@
                 });
             });
 
-            // Art Packs
             onSnapshot(collection(db, 'artpacks'), (snap) => {
                 const list = document.getElementById('artPackList'); list.innerHTML = '';
                 if(snap.empty) list.innerHTML = '<div class="text-sm font-bold text-gray-400">No packs available.</div>';
-                
                 snap.forEach(docSnap => {
                     const data = docSnap.data(); const packId = docSnap.id;
                     const isUnlocked = playerProfile.unlockedPacks.includes(packId);
-                    
                     list.innerHTML += `
                         <div class="p-4 border-4 rounded-xl border-[var(--border-color)] bg-[#fdfbf7] flex justify-between items-center shadow-[4px_4px_0px_rgba(0,0,0,0.1)]">
-                            <div>
-                                <div class="font-black text-md text-[var(--border-color)]">${data.name}</div>
-                                <div class="text-xs font-bold text-gray-500">${data.images.length} exclusive images</div>
-                            </div>
+                            <div><div class="font-black text-md text-[var(--border-color)]">${data.name}</div><div class="text-xs font-bold text-gray-500">${data.images.length} exclusive images</div></div>
                             ${isUnlocked ? `<span class="badge">UNLOCKED</span>` : `<button onclick="window.buyPack('${packId}', ${data.price})" class="lofi-button btn-yellow px-3 py-2 text-xs">Buy ${data.price}🪙</button>`}
                         </div>
                     `;
@@ -745,7 +907,7 @@
             });
         }
 
-        // --- UI NAVIGATION & RENDERING ---
+        // --- UI & NAVIGATION ---
         document.querySelectorAll('.nav-tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -757,9 +919,29 @@
             });
         });
 
+        // Dynamic Grid Input Logic
+        const gridSlider = document.getElementById('gridSlider');
+        const gridInput = document.getElementById('gridInput');
+        const gridDisplayVal = document.getElementById('gridDisplayVal');
+        const piecesCountDisplay = document.getElementById('piecesCountDisplay');
+
+        function updateGridDisplay(val) {
+            gridDisplayVal.textContent = `${val}x${val}`;
+            piecesCountDisplay.textContent = val * val;
+        }
+
+        gridSlider.addEventListener('input', (e) => {
+            gridInput.value = e.target.value; updateGridDisplay(e.target.value);
+        });
+        gridInput.addEventListener('input', (e) => {
+            let val = parseInt(e.target.value);
+            if(val >= 2 && val <= 20) gridSlider.value = val;
+            if(val > 0) updateGridDisplay(val);
+        });
+
         function refreshUI() {
             document.getElementById('playerName').textContent = playerProfile.name;
-            document.getElementById('userAvatar').src = playerProfile.avatarUrl || `https://api.dicebear.com/7.x/micah/svg?seed=${playerProfile.name}`;
+            document.getElementById('userAvatar').src = playerProfile.avatarUrl || `https://api.dicebear.com/7.x/micah/svg?seed=${playerProfile.name}&backgroundColor=fdfbf7`;
             document.getElementById('playerCoins').textContent = playerProfile.coins;
             document.getElementById('playerLvl').textContent = playerProfile.level;
             
@@ -776,11 +958,10 @@
             } else {
                 playerProfile.collection.forEach((item, idx) => {
                     const randRot = Math.random();
-                    // Pass item safely via index to onclick
                     grid.innerHTML += `
                         <div class="polaroid" style="--rand: ${randRot}" onclick="window.openLibraryItem(${idx})">
                             <div class="w-full aspect-square overflow-hidden border-2 border-gray-200 rounded">
-                                <img src="${item.img}" class="w-full h-full object-cover">
+                                <img src="${item.img || item.imageSrc}" class="w-full h-full object-cover">
                             </div>
                             <div class="text-center mt-2 font-black text-xs text-gray-600">${item.diff}x${item.diff} ${item.wand ? '✨' : ''}</div>
                         </div>
@@ -790,14 +971,25 @@
             renderSetupGallery();
         }
 
+        let currentSellIdx = -1;
+        let isSellingUnfinished = false;
+
         window.openLibraryItem = (idx) => {
             const item = playerProfile.collection[idx];
-            document.getElementById('libModalImg').src = item.img;
+            document.getElementById('libModalImg').src = item.img || item.imageSrc;
             document.getElementById('libModalSize').textContent = `${item.diff}x${item.diff}`;
             document.getElementById('libModalShape').textContent = item.shape || 'square';
             
             document.getElementById('libModalReplayBtn').onclick = () => {
                 document.getElementById('libraryModal').classList.add('hidden');
+                
+                // If it's an unfinished market item bought, resume it instead of replay
+                if(item.state) {
+                    Object.assign(gameState, item.state); handleImageSelection(gameState.imageSrc);
+                    const waitForImg = setInterval(() => { if (originalImage) { clearInterval(waitForImg); window.closeSetupMode(); initGame(false, item.pieceStates); } }, 50);
+                    return;
+                }
+
                 handleImageSelection(item.img);
                 const check = setInterval(() => {
                     if(originalImage) {
@@ -810,7 +1002,79 @@
                     }
                 }, 100);
             };
+
+            document.getElementById('libModalSellBtn').onclick = () => {
+                document.getElementById('libraryModal').classList.add('hidden');
+                currentSellIdx = idx; isSellingUnfinished = false;
+                document.getElementById('sellModal').classList.remove('hidden');
+            };
+            
             document.getElementById('libraryModal').classList.remove('hidden');
+        };
+
+        window.sellUnfinishedGame = () => {
+            isSellingUnfinished = true;
+            document.getElementById('sellModal').classList.remove('hidden');
+        };
+
+        document.getElementById('confirmSellBtn').addEventListener('click', async () => {
+            const price = parseInt(document.getElementById('sellPriceInput').value);
+            if(isNaN(price) || price <= 0) return alert("Enter a valid price!");
+            
+            document.getElementById('sellModal').classList.add('hidden');
+            let itemToSell = null;
+
+            if(isSellingUnfinished) {
+                const savedStr = localStorage.getItem('lofiGameSave');
+                if(!savedStr) return;
+                itemToSell = JSON.parse(savedStr);
+                itemToSell.diff = itemToSell.state.gridSize; // For UI preview
+                localStorage.removeItem('lofiGameSave');
+                document.getElementById('continueContainer').classList.add('hidden');
+            } else {
+                if(currentSellIdx < 0) return;
+                itemToSell = playerProfile.collection[currentSellIdx];
+                playerProfile.collection.splice(currentSellIdx, 1);
+            }
+
+            try {
+                await addDoc(collection(db, 'market'), {
+                    seller: playerProfile.name, sellerId: currentUser.uid, price: price, item: itemToSell, ts: Date.now()
+                });
+                await saveProfile();
+                showToast("Listed on Market!");
+            } catch (e) { console.error(e); alert("Error listing on market. Note: Unfinished games might be too large for DB."); }
+        });
+
+        // Market Buy/Remove
+        window.buyMarketItem = async (mId, price) => {
+            if(playerProfile.coins < price) return alert("Not enough coins!");
+            if(!confirm(`Buy for ${price} 🪙?`)) return;
+
+            try {
+                const docRef = doc(db, 'market', mId);
+                const docSnap = await getDoc(docRef);
+                if(docSnap.exists()) {
+                    playerProfile.coins -= price;
+                    playerProfile.collection.push(docSnap.data().item);
+                    await deleteDoc(docRef);
+                    await saveProfile();
+                    showToast("Purchase successful! Check Library.");
+                } else { alert("Item no longer available."); }
+            } catch(e) { console.error(e); }
+        };
+
+        window.removeMarketItem = async (mId) => {
+            try {
+                const docRef = doc(db, 'market', mId);
+                const docSnap = await getDoc(docRef);
+                if(docSnap.exists() && docSnap.data().sellerId === currentUser.uid) {
+                    playerProfile.collection.push(docSnap.data().item); // Return to collection
+                    await deleteDoc(docRef);
+                    await saveProfile();
+                    showToast("Removed from market.");
+                }
+            } catch(e) { console.error(e); }
         };
 
         function renderSetupGallery() {
@@ -839,9 +1103,10 @@
                     if (isPlaying) btn = `<button onclick="window.togglePlaylist(${track.id})" class="px-3 py-1 text-xs font-black text-white border-4 border-[#e53935] bg-[#e53935] rounded-xl">REMOVE</button>`;
                     else btn = `<button onclick="window.togglePlaylist(${track.id})" class="px-3 py-1 text-xs font-black text-[var(--border-color)] border-4 border-[var(--exp-color)] bg-[var(--exp-color)] rounded-xl">ADD</button>`;
                 }
+                const fxIcon = track.fx === 'rain' ? '🌧' : (track.fx === 'leaves' ? '🍂' : '✨');
                 list.innerHTML += `
                     <div class="p-3 border-b-4 border-gray-100 flex justify-between items-center ${isUnlocked ? '' : 'opacity-70'}">
-                        <div class="text-sm font-black text-gray-700">${track.name}</div><div>${btn}</div>
+                        <div class="text-sm font-black text-gray-700 flex items-center gap-2"><span>${fxIcon}</span> ${track.name}</div><div>${btn}</div>
                     </div>
                 `;
             });
@@ -884,7 +1149,9 @@
         window.togglePlaylist = (id) => {
             if(playerProfile.playlist.includes(id)) { if(playerProfile.playlist.length > 1) playerProfile.playlist = playerProfile.playlist.filter(t => t !== id); else alert("Need at least 1 track!"); } 
             else playerProfile.playlist.push(id);
-            saveProfile(); renderShop(); window.audioPlayer.currentIdx = 0;
+            saveProfile(); renderShop();
+            if(!window.audioPlayer.isPlaying) window.audioPlayer.start();
+            else window.audioPlayer.crossfadeToCurrent();
         };
         window.buyPack = async (packId, price) => {
             if(playerProfile.coins >= price) { playerProfile.coins -= price; playerProfile.unlockedPacks.push(packId); await saveProfile(); showToast("Art Pack Unlocked!"); }
@@ -895,50 +1162,9 @@
             t.style.opacity = '1'; setTimeout(() => t.style.opacity = '0', 3000);
         }
 
-        // --- AUDIO ENGINE ---
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        window.audioPlayer = {
-            isPlaying: false, currentIdx: 0, interval: null,
-            playChord(trackId) {
-                if(audioCtx.state === 'suspended') audioCtx.resume();
-                const track = TRACKS_DB.find(t=>t.id===trackId) || TRACKS_DB[0];
-                document.getElementById('nowPlayingText').textContent = `Track: ${track.name}`;
-
-                track.chord.forEach((freq, i) => {
-                    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-                    osc.type = i % 2 === 0 ? 'sine' : 'triangle'; osc.frequency.value = freq + (Math.random() * 2 - 1); 
-                    const now = audioCtx.currentTime;
-                    gain.gain.setValueAtTime(0, now); gain.gain.linearRampToValueAtTime(0.06, now + 0.5 + i*0.2); gain.gain.exponentialRampToValueAtTime(0.001, now + 3.5 + i*0.2);
-                    osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now + i*0.2); osc.stop(now + 4);
-                });
-            },
-            start() { this.isPlaying = true; if(this.interval) clearInterval(this.interval); this.playCurrent(); this.interval = setInterval(() => this.playCurrent(), 4500); },
-            stop() { this.isPlaying = false; clearInterval(this.interval); },
-            nextTrack() { this.currentIdx = (this.currentIdx + 1) % playerProfile.playlist.length; if(this.isPlaying) this.playCurrent(); },
-            playCurrent() { const tId = playerProfile.playlist[this.currentIdx] || 0; this.playChord(tId); }
-        };
-
-        function playSfx(type) {
-            if(audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); const now = audioCtx.currentTime;
-            if (type === 'click' || type === 'drop') {
-                osc.type = 'triangle'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
-                gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-                osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(now + 0.1);
-            } else if (type === 'lock') {
-                osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now); osc.frequency.setValueAtTime(659.25, now+0.1);
-                gain.gain.setValueAtTime(0, now); gain.gain.linearRampToValueAtTime(0.15, now+0.05); gain.gain.exponentialRampToValueAtTime(0.01, now+0.3);
-                osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(now+0.3);
-            } else if (type === 'win') {
-                osc.type = 'triangle'; osc.frequency.setValueAtTime(523, now);
-                gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now+1);
-                osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(now+1);
-            }
-        }
-
         // --- GAME ENGINE ---
         let gameState = {
-            pieces: [], gridSize: 3, shape: 'square',
+            pieces: [], gridSize: 4, shape: 'square',
             useRotation: false, keepHint: false, blockHint: false, isSurvival: false,
             moves: 0, manualMoves: 0, seconds: 0, maxSeconds: 0,
             imageSrc: null, imageAspect: 1, baseValueOverride: 0,
@@ -959,12 +1185,12 @@
         function resizeImage(imgSrc, callback) {
             const img = new Image(); img.crossOrigin = "anonymous";
             img.onload = () => {
-                // Збільшив якість для великих пазлів
-                const maxDim = 1200; let w = img.width, h = img.height;
+                const maxDim = 1600; let w = img.width, h = img.height;
                 if (w > maxDim || h > maxDim) { const ratio = Math.min(maxDim/w, maxDim/h); w *= ratio; h *= ratio; }
                 const canvas = document.createElement('canvas'); canvas.width = w; canvas.height = h; const ctx = canvas.getContext('2d');
                 ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(img, 0, 0, w, h);
-                callback(canvas.toDataURL('image/jpeg', 0.9), w/h);
+                // Changed to PNG for much better piece quality and lossless edges
+                callback(canvas.toDataURL('image/png'), w/h);
             }; img.src = imgSrc;
         }
 
@@ -1000,12 +1226,12 @@
             gameState.wandUsed = false; gameState.hintsUsed = 0; gameState.baseValueOverride = 0; window.closeSetupMode(); initGame(true);
         });
 
-        window.playPublicPuzzle = async (pId, imgUrl, baseVal, price, isUnlocked) => {
+        window.playPublicPuzzle = async (pId, imgUrl, baseVal, price, isUnlocked, forcedGrid) => {
             if(!isUnlocked) {
                 if(playerProfile.coins >= price) {
-                    if(confirm(`Buy this puzzle for ${price} 🪙?`)) {
+                    if(confirm(`Unlock this drop for ${price} 🪙?`)) {
                         playerProfile.coins -= price; playerProfile.unlockedPuzzles.push(pId);
-                        await saveProfile(); showToast("Puzzle Unlocked!");
+                        await saveProfile(); showToast("Drop Unlocked!");
                     } else return;
                 } else { alert("Not enough coins!"); return; }
             }
@@ -1013,7 +1239,7 @@
             const check = setInterval(() => {
                 if(originalImage) {
                     clearInterval(check); localStorage.removeItem('lofiGameSave');
-                    gameState.gridSize = 4; gameState.shape = 'jigsaw'; gameState.useRotation = false; gameState.blockHint = false;
+                    gameState.gridSize = forcedGrid; gameState.shape = 'jigsaw'; gameState.useRotation = false; gameState.blockHint = false;
                     gameState.isSurvival = false; gameState.wandUsed = false; gameState.hintsUsed = 0; gameState.baseValueOverride = baseVal;
                     initGame(true);
                 }
@@ -1030,7 +1256,10 @@
 
         window.confirmExit = () => {
             if(confirm("Exit? Progress is saved.")) {
-                isGameActive = false; clearInterval(timerInterval); window.audioPlayer.stop(); saveLocalState(); document.getElementById('viewGame').classList.add('hidden');
+                isGameActive = false; clearInterval(timerInterval); 
+                saveLocalState(); document.getElementById('viewGame').classList.add('hidden');
+                // Auto switch back to previous tab
+                document.querySelector('.nav-tab.active').click();
             }
         };
 
@@ -1043,45 +1272,34 @@
         }
 
         function initGame(isNew, savedStates = null) {
-            document.getElementById('viewGame').classList.remove('hidden'); window.audioPlayer.start();
+            document.getElementById('viewGame').classList.remove('hidden'); 
+            window.audioPlayer.start();
             if (isNew) {
                 gameState.moves = 0; gameState.manualMoves = 0; 
-                // Time map logic for dynamic grid sizes
-                let baseTime = gameState.gridSize * gameState.gridSize * 15; // 15s per piece
+                let baseTime = gameState.gridSize * gameState.gridSize * 15; 
                 gameState.maxSeconds = baseTime; gameState.seconds = gameState.isSurvival ? gameState.maxSeconds : 0;
             }
             UI.bgHintOverlay.style.opacity = gameState.keepHint ? '0.2' : '0'; UI.hintBtn.style.display = gameState.blockHint ? 'none' : 'block';
             updateUIStats(); createPuzzle(savedStates); startTimer(); isGameActive = true; if(isNew) saveLocalState();
         }
 
-        // Покращений алгоритм кривих для Jigsaw
+        // Precise Jigsaw Path
         function drawJigsawPath(ctx, w, h, t, r, b, l, tSize) {
             ctx.beginPath(); ctx.moveTo(tSize, tSize);
-            // Top
             if (t===0) ctx.lineTo(w+tSize, tSize); 
             else { const cx=tSize+w/2; ctx.lineTo(cx-tSize*0.5, tSize); ctx.bezierCurveTo(cx-tSize*0.3, tSize-t*tSize*0.9, cx-tSize*0.7, tSize-t*tSize*1.1, cx, tSize-t*tSize*1.3); ctx.bezierCurveTo(cx+tSize*0.7, tSize-t*tSize*1.1, cx+tSize*0.3, tSize-t*tSize*0.9, cx+tSize*0.5, tSize); ctx.lineTo(w+tSize, tSize); }
-            // Right
             if (r===0) ctx.lineTo(w+tSize, h+tSize); 
             else { const cy=tSize+h/2; ctx.lineTo(w+tSize, cy-tSize*0.5); ctx.bezierCurveTo(w+tSize+r*tSize*0.9, cy-tSize*0.3, w+tSize+r*tSize*1.1, cy-tSize*0.7, w+tSize+r*tSize*1.3, cy); ctx.bezierCurveTo(w+tSize+r*tSize*1.1, cy+tSize*0.7, w+tSize+r*tSize*0.9, cy+tSize*0.3, w+tSize, cy+tSize*0.5); ctx.lineTo(w+tSize, h+tSize); }
-            // Bottom
             if (b===0) ctx.lineTo(tSize, h+tSize); 
             else { const cx=tSize+w/2; ctx.lineTo(cx+tSize*0.5, h+tSize); ctx.bezierCurveTo(cx+tSize*0.3, h+tSize+b*tSize*0.9, cx+tSize*0.7, h+tSize+b*tSize*1.1, cx, h+tSize+b*tSize*1.3); ctx.bezierCurveTo(cx-tSize*0.7, h+tSize+b*tSize*1.1, cx-tSize*0.3, h+tSize+b*tSize*0.9, cx-tSize*0.5, h+tSize); ctx.lineTo(tSize, h+tSize); }
-            // Left
             if (l===0) ctx.lineTo(tSize, tSize); 
             else { const cy=tSize+h/2; ctx.lineTo(tSize, cy+tSize*0.5); ctx.bezierCurveTo(tSize-l*tSize*0.9, cy+tSize*0.3, tSize-l*tSize*1.1, cy+tSize*0.7, tSize-l*tSize*1.3, cy); ctx.bezierCurveTo(tSize-l*tSize*1.1, cy-tSize*0.7, tSize-l*tSize*0.9, cy-tSize*0.3, tSize, cy-tSize*0.5); ctx.lineTo(tSize, tSize); }
             ctx.closePath();
         }
 
-        // Покращений Гексагон (Ближче до сот)
+        // Precise Hex Path
         function drawHexPath(ctx, w, h) { 
-            ctx.beginPath(); 
-            ctx.moveTo(w*0.5, 0); 
-            ctx.lineTo(w, h*0.25); 
-            ctx.lineTo(w, h*0.75); 
-            ctx.lineTo(w*0.5, h); 
-            ctx.lineTo(0, h*0.75); 
-            ctx.lineTo(0, h*0.25); 
-            ctx.closePath(); 
+            ctx.beginPath(); ctx.moveTo(w*0.5, 0); ctx.lineTo(w, h*0.25); ctx.lineTo(w, h*0.75); ctx.lineTo(w*0.5, h); ctx.lineTo(0, h*0.75); ctx.lineTo(0, h*0.25); ctx.closePath(); 
         }
 
         function createPuzzle(savedStates) {
@@ -1092,7 +1310,6 @@
             const pcSize = 100 / gameState.gridSize;
             const isJigsaw = gameState.shape === 'jigsaw'; 
             
-            // Менші і акуратніші вушка для пазлу
             const tabSize = isJigsaw ? Math.min(imgW, imgH) * 0.22 : 0; 
             const pcTabX = isJigsaw ? (tabSize/originalImage.width)*100 : 0, pcTabY = isJigsaw ? (tabSize/originalImage.height)*100 : 0;
 
@@ -1103,21 +1320,17 @@
                 for(let c=0; c<gameState.gridSize; c++){
                     const cvs = document.createElement('canvas'); cvs.className='puzzle-piece';
                     cvs.width = imgW + tabSize*2; cvs.height = imgH + tabSize*2; const ctx = cvs.getContext('2d');
-                    
+                    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+
                     if(isJigsaw){
                         const tEdge = r===0?0:-hEdges[r-1][c], bEdge = r===gameState.gridSize-1?0:hEdges[r][c];
                         const lEdge = c===0?0:-vEdges[r][c-1], rEdge = c===gameState.gridSize-1?0:vEdges[r][c];
                         
-                        ctx.save(); 
-                        drawJigsawPath(ctx, imgW, imgH, tEdge, rEdge, bEdge, lEdge, tabSize); 
-                        ctx.clip();
+                        ctx.save(); drawJigsawPath(ctx, imgW, imgH, tEdge, rEdge, bEdge, lEdge, tabSize); ctx.clip();
                         ctx.drawImage(originalImage, c*imgW-tabSize, r*imgH-tabSize, cvs.width, cvs.height, 0, 0, cvs.width, cvs.height);
                         ctx.restore(); 
-                        
-                        ctx.lineWidth = Math.max(1, imgW*0.015); 
-                        ctx.strokeStyle = "rgba(61,49,42,0.6)";
-                        drawJigsawPath(ctx, imgW, imgH, tEdge, rEdge, bEdge, lEdge, tabSize); 
-                        ctx.stroke();
+                        ctx.lineWidth = Math.max(1, imgW*0.015); ctx.strokeStyle = "rgba(61,49,42,0.6)";
+                        drawJigsawPath(ctx, imgW, imgH, tEdge, rEdge, bEdge, lEdge, tabSize); ctx.stroke();
                     } else if(gameState.shape === 'hexagon') {
                         ctx.save(); drawHexPath(ctx, cvs.width, cvs.height); ctx.clip();
                         ctx.drawImage(originalImage, c*imgW, r*imgH, imgW, imgH, 0, 0, cvs.width, cvs.height);
@@ -1169,8 +1382,7 @@
                 playSfx('lock');
                 setTimeout(() => piece.element.classList.remove('flash-lock'), 500);
             } else if (!isCorrect && piece.isPlaced) {
-                piece.isPlaced = false;
-                piece.element.classList.remove('placed');
+                piece.isPlaced = false; piece.element.classList.remove('placed');
             }
             updatePieceTransform(piece, false);
         }
@@ -1261,10 +1473,9 @@
         }
 
         function calculateValue() {
-            if (gameState.moves > 0 && gameState.manualMoves === 0) return 0; // 100% WANDed
-            if (gameState.baseValueOverride === 0) return 0; // Replay zero reward
+            if (gameState.moves > 0 && gameState.manualMoves === 0) return 0; 
+            if (gameState.baseValueOverride === 0) return 0; 
             
-            // Hard economy logic: Less coins!
             let b = gameState.baseValueOverride > 0 ? gameState.baseValueOverride : (gameState.gridSize*gameState.gridSize) * 2;
             if(gameState.isSurvival) b*=1.5; if(gameState.blockHint) b*=1.3; if(gameState.useRotation) b*=1.4; if(gameState.shape==='jigsaw') b*=1.1;
             if(gameState.wandUsed) b=0; 
@@ -1276,7 +1487,7 @@
         function checkWin() {
             const isWin = gameState.pieces.every(p => p.currentCol===p.originalCol && p.currentRow===p.originalRow && (p.currentRotation%360)===0);
             if(isWin && isGameActive) {
-                isGameActive = false; clearInterval(timerInterval); window.audioPlayer.stop();
+                isGameActive = false; clearInterval(timerInterval);
                 localStorage.removeItem('lofiGameSave'); playSfx('win');
                 confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 }, colors: ['#f2a29b', '#9bc4b5', '#f4d386'] });
                 gameState.pieces.forEach(p => { p.element.style.filter = 'none'; p.element.style.transform = 'scale(1)'; });
@@ -1303,7 +1514,7 @@
         }
 
         function handleLose() {
-            isGameActive=false; clearInterval(timerInterval); window.audioPlayer.stop(); localStorage.removeItem('lofiGameSave');
+            isGameActive=false; clearInterval(timerInterval); localStorage.removeItem('lofiGameSave');
             document.getElementById('resultTitle').textContent = "TIME OUT! ⏳";
             document.getElementById('resValue').textContent = "0";
             document.getElementById('resultModal').classList.remove('hidden');
@@ -1314,32 +1525,45 @@
             if(gameState.calculatedValue > 0 || action==='keep') {
                 if(action==='sell') addExpAndCoins(gameState.calculatedValue);
                 else if(action==='keep') {
-                    // Prevent duplicates in collection
                     const exists = playerProfile.collection.find(i => i.img === gameState.imageSrc && i.diff === gameState.gridSize && i.shape === gameState.shape);
                     if(!exists) playerProfile.collection.push({ img: gameState.imageSrc, diff: gameState.gridSize, shape: gameState.shape, wand: gameState.wandUsed });
                     addExpAndCoins(Math.floor(gameState.calculatedValue * 0.2)); 
                 }
             }
             document.getElementById('viewGame').classList.add('hidden');
-            document.querySelector('.nav-tab[data-target="viewPublic"]').click();
+            document.querySelector('.nav-tab.active').click();
         };
 
-        // --- ADMIN FUNCTIONS ---
+        // --- ADMIN PUBLISHING ---
+        let adminBase64Image = null;
+        document.getElementById('adminPuzFile').addEventListener('change', (e) => {
+            if(!e.target.files[0]) { adminBase64Image = null; return; }
+            resizeImage(URL.createObjectURL(e.target.files[0]), (base64) => {
+                adminBase64Image = base64; showToast("File ready for publish!");
+            });
+        });
+
         window.adminPublishMsg = async () => {
             if(!db) return; const txt = document.getElementById('adminMsgInput').value; if(!txt) return;
             await addDoc(collection(db, 'announcements'), { text: txt, ts: Date.now() }); alert("Broadcasted!"); document.getElementById('adminMsgInput').value = '';
         };
-        window.adminPublishPuzzle = async () => {
-            if(!db) return; const url = document.getElementById('adminPuzImg').value; const title = document.getElementById('adminPuzTitle').value; 
-            const rwd = document.getElementById('adminPuzReward').value; const price = document.getElementById('adminPuzPrice').value;
-            const expHours = document.getElementById('adminPuzExpiry').value;
-            
-            if(!url || !title) return;
-            const payload = { imageUrl: url, title: title, baseValue: Number(rwd)||20, price: Number(price)||0 };
-            if(expHours) payload.expiresAt = Date.now() + (Number(expHours) * 3600000); // hours to ms
 
-            await addDoc(collection(db, 'puzzles'), payload); alert("Puzzle published!");
+        window.adminPublishPuzzle = async () => {
+            if(!db) return; 
+            const url = document.getElementById('adminPuzImg').value; const title = document.getElementById('adminPuzTitle').value; 
+            const rwd = document.getElementById('adminPuzReward').value; const price = document.getElementById('adminPuzPrice').value;
+            const expHours = document.getElementById('adminPuzExpiry').value; const reqGrid = document.getElementById('adminPuzGrid').value;
+            
+            const finalImageUrl = adminBase64Image || url;
+            if(!finalImageUrl || !title) return alert("Title and Image (URL or File) are required!");
+            
+            const payload = { imageUrl: finalImageUrl, title: title, baseValue: Number(rwd)||20, price: Number(price)||0, forcedGridSize: Number(reqGrid)||0 };
+            if(expHours) payload.expiresAt = Date.now() + (Number(expHours) * 3600000);
+
+            try { await addDoc(collection(db, 'puzzles'), payload); alert("Puzzle published!"); document.getElementById('adminPuzImg').value = ''; document.getElementById('adminPuzFile').value = ''; adminBase64Image = null; } 
+            catch(e) { console.error(e); alert("Failed. File might be too large for Firestore."); }
         };
+
         window.adminPublishPack = async () => {
             if(!db) return; const name = document.getElementById('adminPackName').value; const price = document.getElementById('adminPackPrice').value; const urls = document.getElementById('adminPackUrls').value.split(',').map(s=>s.trim()).filter(s=>s);
             if(!name || urls.length===0) return;
