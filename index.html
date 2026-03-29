@@ -20,6 +20,20 @@
             --exp-color: #9bc4b5;
         }
 
+        /* Cyberpunk Theme */
+        body.theme-cyberpunk {
+            --bg-color: #0d0e15; --panel-bg: #1a1c29; --border-color: #00ffcc;
+            --accent-color: #ff007f; --accent-hover: #ff4d94; --text-color: #e0e0e0;
+            --money-color: #fce83a; --exp-color: #bc13fe;
+        }
+
+        /* Retro Gameboy Theme */
+        body.theme-retro {
+            --bg-color: #8b956d; --panel-bg: #c4cfa1; --border-color: #2b331f;
+            --accent-color: #2b331f; --accent-hover: #4a5935; --text-color: #2b331f;
+            --money-color: #e0f8cf; --exp-color: #8b956d;
+        }
+
         /* Subtle Grain Overlay */
         .grain-overlay {
             position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.15;
@@ -36,7 +50,7 @@
             animation: fall linear infinite;
         }
         .leaf {
-            position: absolute; width: 12px; height: 12px; background: #e89088; border-radius: 50% 0 50% 0;
+            position: absolute; width: 12px; height: 12px; background: var(--accent-color); border-radius: 50% 0 50% 0;
             opacity: 0.8; animation: leafFall linear infinite;
         }
         @keyframes fall {
@@ -54,11 +68,37 @@
             user-select: none; overflow-x: hidden; position: relative;
         }
 
+        /* Floating Dock UI */
+        .floating-dock {
+            position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
+            background: var(--panel-bg); border: 4px solid var(--border-color);
+            border-radius: 25px; padding: 0.5rem 0.8rem; display: flex; gap: 0.5rem;
+            box-shadow: 0px 8px 0px var(--border-color); z-index: 1000;
+            overflow-x: auto; max-width: 95vw; scrollbar-width: none;
+            transition: all 0.5s;
+        }
+        .floating-dock::-webkit-scrollbar { display: none; }
+        .dock-btn {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            width: 50px; height: 50px; border-radius: 15px; border: 3px solid transparent;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; color: var(--border-color);
+            flex-shrink: 0; cursor: pointer;
+        }
+        .dock-btn.active {
+            background: var(--accent-color); border: 3px solid var(--border-color);
+            transform: translateY(-5px); box-shadow: 0 4px 0 var(--border-color);
+        }
+        .dock-btn span.icon { font-size: 1.4rem; filter: drop-shadow(1px 1px 0px rgba(0,0,0,0.2)); }
+        .dock-btn span.label { font-size: 0.5rem; font-weight: 900; margin-top: 2px; text-transform: uppercase; }
+        
+        body.theme-retro .dock-btn.active span.icon { filter: none; }
+        body.theme-cyberpunk .dock-btn.active { color: var(--panel-bg); }
+
         /* Toon / Lo-Fi UI */
         .lofi-box {
             background-color: var(--panel-bg); border: 4px solid var(--border-color);
             border-radius: 16px; box-shadow: 6px 6px 0px var(--border-color);
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, background-color 0.5s, border-color 0.5s;
             position: relative; z-index: 10;
         }
         
@@ -66,7 +106,7 @@
             background-color: var(--accent-color); color: var(--text-color);
             border: 4px solid var(--border-color); border-radius: 12px;
             box-shadow: 4px 4px 0px var(--border-color); font-weight: 900;
-            transition: all 0.1s ease; text-transform: uppercase; letter-spacing: 1px;
+            transition: all 0.1s ease, background-color 0.5s; text-transform: uppercase; letter-spacing: 1px;
             cursor: pointer; position: relative; z-index: 10;
         }
         .lofi-button:active:not(:disabled) {
@@ -79,29 +119,15 @@
 
         .btn-green { background-color: var(--exp-color); }
         .btn-yellow { background-color: var(--money-color); }
-        .btn-ghost { background-color: #e8e4db; }
-        .btn-dark { background-color: var(--border-color); color: white; }
-        .btn-white { background-color: white; color: var(--text-color); }
-
-        /* Navigation Tabs */
-        .nav-tab {
-            padding: 10px 14px; font-weight: 900; font-size: 0.85rem;
-            border: 4px solid transparent; border-bottom: 4px solid var(--border-color);
-            cursor: pointer; opacity: 0.5; transition: all 0.2s;
-            color: var(--border-color); position: relative; z-index: 10;
-        }
-        .nav-tab.active {
-            opacity: 1; border: 4px solid var(--border-color);
-            border-bottom: 4px solid var(--bg-color); background: var(--bg-color);
-            border-radius: 12px 12px 0 0; transform: translateY(4px);
-        }
+        .btn-ghost { background-color: transparent; border: 4px solid var(--border-color); }
+        .btn-dark { background-color: var(--border-color); color: var(--bg-color); }
 
         /* Puzzle Container */
         #puzzleContainer {
             position: relative; background-color: #d1ccc1;
             border: 6px solid var(--border-color); border-radius: 12px;
             width: 100%; max-width: 600px; margin: 0 auto;
-            box-shadow: 8px 8px 0px rgba(61, 49, 42, 0.15);
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.3);
             overflow: hidden; z-index: 10;
         }
 
@@ -141,59 +167,58 @@
         #fullHintOverlay { opacity: 0; z-index: 100; transition: opacity 0.2s; border-radius: 4px; }
 
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(61, 49, 42, 0.8);
-            backdrop-filter: blur(6px); z-index: 2000;
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px); z-index: 2000;
             display: flex; align-items: center; justify-content: center; padding: 1rem;
         }
         
         .badge {
             display: inline-block; padding: 4px 8px; border-radius: 6px;
             font-size: 0.75rem; font-weight: 900; border: 3px solid var(--border-color);
-            background: white; color: var(--border-color);
+            background: var(--bg-color); color: var(--border-color);
         }
 
         .polaroid {
-            background: white; padding: 8px 8px 20px 8px;
-            border: 3px solid var(--border-color); box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+            background: var(--panel-bg); padding: 8px 8px 20px 8px;
+            border: 3px solid var(--border-color); box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
             border-radius: 6px; transform: rotate(calc(-3deg + 6deg * var(--rand)));
             transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
             cursor: pointer; position: relative; z-index: 10;
         }
         .polaroid:hover {
-            transform: scale(1.08) rotate(0deg); box-shadow: 8px 8px 0px rgba(0,0,0,0.2); z-index: 20;
+            transform: scale(1.08) rotate(0deg); box-shadow: 8px 8px 0px rgba(0,0,0,0.4); z-index: 20;
         }
 
         .avatar-img {
             width: 40px; height: 40px; border-radius: 50%;
-            border: 3px solid var(--border-color); background: white;
+            border: 3px solid var(--border-color); background: var(--bg-color);
         }
 
-        /* Custom Range Slider */
-        input[type=range] {
-            -webkit-appearance: none; width: 100%; background: transparent;
-        }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%;
             background: var(--accent-color); cursor: pointer; border: 3px solid var(--border-color);
             box-shadow: 2px 2px 0px var(--border-color); margin-top: -8px;
         }
         input[type=range]::-webkit-slider-runnable-track {
-            width: 100%; height: 8px; cursor: pointer; background: #e8e4db;
+            width: 100%; height: 8px; cursor: pointer; background: var(--bg-color);
             border-radius: 4px; border: 2px solid var(--border-color);
         }
+        
+        .view-section { padding-bottom: 6rem; /* space for dock */ }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center">
+<body class="min-h-screen flex flex-col items-center transition-colors duration-500 theme-default">
 
     <!-- Preloader -->
     <div id="preloader" class="fixed inset-0 bg-[#fdfbf7] z-[9999] flex flex-col items-center justify-center transition-opacity duration-1000">
-        <div id="preloaderText" class="text-3xl font-black text-[var(--border-color)] tracking-widest opacity-0 transition-opacity duration-1000">DEEPROOT GAMES</div>
+        <div id="preloaderText" class="text-3xl font-black text-[#3d312a] tracking-widest opacity-0 transition-opacity duration-1000">DEEPROOT GAMES</div>
     </div>
 
     <div class="grain-overlay"></div>
     <div id="weatherContainer"></div>
 
-    <div id="announcementBanner" class="w-full hidden z-50 bg-[var(--accent-color)] text-[var(--border-color)] p-2 font-black text-center border-b-4 border-[var(--border-color)] text-sm shadow-md relative">
+    <div id="announcementBanner" class="w-full hidden z-50 bg-[var(--accent-color)] text-[var(--border-color)] p-2 font-black text-center border-b-4 border-[var(--border-color)] text-sm shadow-md relative transition-colors duration-500">
         📢 <span id="announcementText">Welcome!</span>
     </div>
 
@@ -203,13 +228,13 @@
         <div class="lofi-box p-8 flex flex-col gap-5 max-w-sm w-full text-center">
             
             <div id="authStep1" class="flex flex-col gap-4">
-                <p class="font-bold text-gray-600 mb-2">Save your progress & trade on the market.</p>
+                <p class="font-bold text-[var(--text-color)] mb-2">Save your progress & trade on the market.</p>
                 <button id="btnGoogleLogin" class="lofi-button btn-ghost py-3 flex items-center justify-center gap-3">
                     <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
                     Google Sign In
                 </button>
-                <div class="flex items-center gap-2 text-gray-400 font-bold text-sm">
-                    <hr class="flex-grow border-gray-300"> OR <hr class="flex-grow border-gray-300">
+                <div class="flex items-center gap-2 text-[var(--text-color)] font-bold text-sm opacity-50">
+                    <hr class="flex-grow border-[var(--border-color)]"> OR <hr class="flex-grow border-[var(--border-color)]">
                 </div>
                 <button id="btnGuestLogin" class="lofi-button py-3">Play as Guest</button>
             </div>
@@ -217,7 +242,7 @@
             <div id="authStep2" class="hidden flex-col gap-4">
                 <p class="font-bold text-[var(--border-color)]">Choose your identity</p>
                 <img id="previewAvatar" src="https://api.dicebear.com/7.x/micah/svg?seed=Guest" class="w-24 h-24 mx-auto rounded-full border-4 border-[var(--border-color)] bg-gray-100">
-                <input type="text" id="nicknameInput" placeholder="Enter Nickname..." class="w-full p-3 border-4 border-[var(--border-color)] rounded-xl font-bold text-center focus:outline-none focus:border-[var(--accent-color)]">
+                <input type="text" id="nicknameInput" placeholder="Enter Nickname..." class="w-full p-3 border-4 border-[var(--border-color)] rounded-xl font-bold text-center focus:outline-none focus:border-[var(--accent-color)] text-[var(--text-color)] bg-[var(--bg-color)]">
                 <button id="btnSaveNickname" class="lofi-button btn-green py-3">ENTER HUB</button>
             </div>
 
@@ -227,87 +252,75 @@
 
     <!-- Header / User Profile Bar -->
     <div class="w-full max-w-[600px] px-4 pt-6 pb-2 z-20 relative">
-        <div class="flex justify-between items-center mb-4 bg-white border-4 border-[var(--border-color)] rounded-2xl p-2 shadow-[4px_4px_0px_#3d312a]">
+        <div class="lofi-box flex justify-between items-center mb-2 p-2">
             <div class="flex items-center gap-3">
                 <img id="userAvatar" src="" class="avatar-img">
                 <div class="flex flex-col">
                     <span id="playerName" class="font-black text-sm uppercase leading-tight">PLAYER</span>
-                    <span class="text-[0.65rem] font-bold text-gray-500 cursor-pointer hover:underline" id="btnSignOut">SIGN OUT</span>
+                    <span class="text-[0.65rem] font-bold text-[var(--text-color)] opacity-70 cursor-pointer hover:underline" id="btnSignOut">SIGN OUT</span>
                 </div>
             </div>
             <div class="flex gap-2">
-                <div class="bg-[var(--exp-color)] border-2 border-[var(--border-color)] rounded-lg px-2 py-1 flex items-center gap-1 shadow-[2px_2px_0px_#3d312a]">
+                <div class="bg-[var(--exp-color)] border-2 border-[var(--border-color)] rounded-lg px-2 py-1 flex items-center gap-1 shadow-[2px_2px_0px_var(--border-color)]">
                     <span class="font-black text-[var(--border-color)] text-xs">LVL</span>
-                    <span id="playerLvl" class="font-black text-white text-sm">1</span>
+                    <span id="playerLvl" class="font-black text-[var(--bg-color)] text-sm">1</span>
                 </div>
-                <div class="bg-[var(--money-color)] border-2 border-[var(--border-color)] rounded-lg px-2 py-1 flex items-center gap-1 shadow-[2px_2px_0px_#3d312a]">
+                <div class="bg-[var(--money-color)] border-2 border-[var(--border-color)] rounded-lg px-2 py-1 flex items-center gap-1 shadow-[2px_2px_0px_var(--border-color)]">
                     <span class="text-xs">🪙</span>
                     <span id="playerCoins" class="font-black text-[var(--border-color)] text-sm">0</span>
                 </div>
             </div>
         </div>
-
-        <!-- Navigation -->
-        <div class="flex gap-1 border-b-4 border-[var(--border-color)] overflow-x-auto scrollbar-hide pt-2" id="mainNav">
-            <div class="nav-tab active" data-target="viewPublic">DROPS</div>
-            <div class="nav-tab text-[#e53935]" data-target="viewMarket">MARKET</div>
-            <div class="nav-tab" data-target="viewLibrary">LIBRARY</div>
-            <div class="nav-tab" data-target="viewHub">CRAFT</div>
-            <div class="nav-tab" data-target="viewQuests">QUESTS</div>
-            <div class="nav-tab" data-target="viewShop">SHOP</div>
-            <div class="nav-tab" data-target="viewLeaders">RANKS</div>
-            <div class="nav-tab hidden bg-[#e89088] text-white border-[#e89088]" id="adminTab" data-target="viewAdmin">ADMIN</div>
-        </div>
     </div>
 
     <!-- MAIN CONTENT VIEWS -->
-    <div class="w-full max-w-[600px] px-4 pb-6 flex-grow flex flex-col relative z-20">
+    <div class="w-full max-w-[600px] px-4 flex-grow flex flex-col relative z-20">
 
         <!-- VIEW: PUBLIC PUZZLES -->
-        <div id="viewPublic" class="view-section flex flex-col gap-4 mt-4">
-            <div class="lofi-box p-4 bg-[#fffdf9] border-dashed border-[var(--accent-color)] mb-2">
-                <h2 class="font-black text-lg">FEATURED SHARDS</h2>
-                <p class="text-xs text-gray-500 font-bold">Limited time official drops. Unlock to keep forever.</p>
+        <div id="viewPublic" class="view-section flex flex-col gap-4 mt-2">
+            <div class="lofi-box p-4 bg-[var(--bg-color)] border-dashed border-[var(--accent-color)] mb-2">
+                <h2 class="font-black text-lg">FEATURED DROPS</h2>
+                <p class="text-xs text-[var(--text-color)] opacity-70 font-bold">Limited time official drops. Supports GIFs & Images.</p>
             </div>
             <div id="publicPuzzlesGrid" class="flex flex-col gap-4">
-                <div class="text-center font-bold text-gray-400 py-6">Loading public drops...</div>
+                <div class="text-center font-bold opacity-50 py-6">Loading public drops...</div>
             </div>
         </div>
 
         <!-- VIEW: MARKET (Player Trading) -->
-        <div id="viewMarket" class="view-section hidden flex flex-col gap-4 mt-4">
-            <div class="lofi-box p-4 bg-yellow-50 border-[var(--money-color)] mb-2">
-                <h2 class="font-black text-lg text-yellow-800">PLAYER MARKET</h2>
-                <p class="text-xs text-yellow-700 font-bold">Buy unique art or unfinished puzzles from other players in real-time.</p>
+        <div id="viewMarket" class="view-section hidden flex flex-col gap-4 mt-2">
+            <div class="lofi-box p-4 bg-[var(--money-color)] border-[var(--border-color)] mb-2">
+                <h2 class="font-black text-lg text-[var(--border-color)]">PLAYER MARKET</h2>
+                <p class="text-xs text-[var(--border-color)] font-bold">Buy unique art or unfinished puzzles from other players in real-time.</p>
             </div>
             <div id="marketGrid" class="grid grid-cols-2 gap-4">
-                <div class="text-center font-bold text-gray-400 py-6 col-span-2">Loading market...</div>
+                <div class="text-center font-bold opacity-50 py-6 col-span-2">Loading market...</div>
             </div>
         </div>
 
         <!-- VIEW: LIBRARY -->
-        <div id="viewLibrary" class="view-section hidden flex flex-col gap-4 mt-4">
+        <div id="viewLibrary" class="view-section hidden flex flex-col gap-4 mt-2">
             <div class="lofi-box p-5">
                 <h2 class="font-black text-xl mb-4 flex items-center justify-between">
                     <span>MY COLLECTION</span>
-                    <span class="text-sm font-bold bg-gray-100 px-2 py-1 rounded border-2 border-gray-300" id="collectionCount">0</span>
+                    <span class="text-sm font-bold bg-[var(--bg-color)] px-2 py-1 rounded border-2 border-[var(--border-color)]" id="collectionCount">0</span>
                 </h2>
                 <div id="collectionGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-6 p-2">
-                    <div class="text-sm font-bold text-gray-400 col-span-full text-center py-6">Gallery is empty. Play to collect!</div>
+                    <div class="text-sm font-bold opacity-50 col-span-full text-center py-6">Gallery is empty. Play to collect!</div>
                 </div>
             </div>
         </div>
 
         <!-- VIEW: HUB (Craft) -->
-        <div id="viewHub" class="view-section hidden flex flex-col gap-4 mt-4">
+        <div id="viewHub" class="view-section hidden flex flex-col gap-4 mt-2">
             <button onclick="window.startSetupMode()" class="lofi-box bg-[var(--accent-color)] text-[var(--text-color)] py-8 text-xl font-black flex flex-col items-center justify-center hover:scale-[1.02] transition-transform">
                 <span class="text-4xl mb-2">🧩</span> CRAFT CUSTOM
             </button>
-            <div class="text-center text-sm text-gray-500 font-bold px-4">Upload your own aesthetic images or use unlocked art packs to craft unique shards.</div>
+            <div class="text-center text-sm font-bold opacity-70 px-4">Upload your own aesthetic images/GIFs or use unlocked art packs to craft unique shards.</div>
         </div>
 
         <!-- VIEW: QUESTS -->
-        <div id="viewQuests" class="view-section hidden flex flex-col gap-4 mt-4">
+        <div id="viewQuests" class="view-section hidden flex flex-col gap-4 mt-2">
             <div class="lofi-box p-5">
                 <h2 class="font-black text-xl mb-4">ACHIEVEMENTS</h2>
                 <div id="questsGrid" class="flex flex-col gap-3"></div>
@@ -315,12 +328,20 @@
         </div>
 
         <!-- VIEW: SHOP -->
-        <div id="viewShop" class="view-section hidden flex flex-col gap-4 mt-4">
+        <div id="viewShop" class="view-section hidden flex flex-col gap-4 mt-2">
+            
+            <div class="lofi-box p-5">
+                <h2 class="font-black text-xl mb-3 flex items-center gap-2">🎨 UI THEMES</h2>
+                <div class="text-[0.65rem] opacity-70 mb-2 font-bold uppercase tracking-widest">Customize your aesthetic</div>
+                <div id="themeList" class="flex flex-col gap-2"></div>
+            </div>
+
             <div class="lofi-box p-5">
                 <h2 class="font-black text-xl mb-3 flex items-center gap-2">📻 MUSIC STORE</h2>
-                <div class="text-[0.65rem] text-gray-500 mb-2 font-bold uppercase tracking-widest">Buy real MP3 tracks & Weather Effects</div>
+                <div class="text-[0.65rem] opacity-70 mb-2 font-bold uppercase tracking-widest">Buy real MP3 tracks & Weather Effects</div>
                 <div id="trackList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-2"></div>
             </div>
+            
             <div class="lofi-box p-5">
                 <h2 class="font-black text-xl mb-3 flex items-center gap-2">🖼 ART PACKS</h2>
                 <div id="artPackList" class="flex flex-col gap-3"></div>
@@ -328,57 +349,47 @@
         </div>
 
         <!-- VIEW: LEADERBOARD -->
-        <div id="viewLeaders" class="view-section hidden flex flex-col gap-4 mt-4">
+        <div id="viewLeaders" class="view-section hidden flex flex-col gap-4 mt-2">
             <div class="lofi-box p-5">
                 <h2 class="font-black text-xl mb-4 text-center">GLOBAL RANKINGS</h2>
-                <div class="flex justify-between text-xs font-black text-gray-400 border-b-4 border-gray-100 pb-2 mb-2 px-2">
+                <div class="flex justify-between text-xs font-black opacity-70 border-b-4 border-[var(--border-color)] pb-2 mb-2 px-2">
                     <span>PLAYER</span>
                     <span>LVL / EXP</span>
                 </div>
                 <div id="leaderboardList" class="flex flex-col gap-2">
-                    <div class="text-center font-bold text-gray-400 py-4">Loading ranks...</div>
+                    <div class="text-center font-bold opacity-50 py-4">Loading ranks...</div>
                 </div>
             </div>
         </div>
 
         <!-- VIEW: ADMIN PANEL -->
-        <div id="viewAdmin" class="view-section hidden flex flex-col gap-4 mt-4">
-            <div class="lofi-box p-5 bg-[#ffebee] border-[#c62828]">
+        <div id="viewAdmin" class="view-section hidden flex flex-col gap-4 mt-2">
+            <div class="lofi-box p-5" style="background: #ffebee; border-color: #c62828;">
                 <h2 class="font-black text-xl mb-4 text-[#c62828]">ADMIN CONTROL PANEL</h2>
                 
                 <div class="mb-5 border-b-4 border-red-200 pb-5">
-                    <h3 class="font-black text-sm mb-2">1. Broadcast Announcement</h3>
-                    <input type="text" id="adminMsgInput" placeholder="Message..." class="w-full p-2 border-4 border-gray-300 rounded-lg mb-2 font-bold text-sm">
-                    <button onclick="window.adminPublishMsg()" class="lofi-button btn-dark px-4 py-2 text-xs w-full">Broadcast</button>
+                    <h3 class="font-black text-sm mb-2 text-[#c62828]">1. Broadcast Announcement</h3>
+                    <input type="text" id="adminMsgInput" placeholder="Message..." class="w-full p-2 border-4 border-gray-300 rounded-lg mb-2 font-bold text-sm bg-white text-black">
+                    <button onclick="window.adminPublishMsg()" class="lofi-button px-4 py-2 text-xs w-full" style="background: #c62828; color: white;">Broadcast</button>
                 </div>
 
                 <div class="mb-5 border-b-4 border-red-200 pb-5">
-                    <h3 class="font-black text-sm mb-2">2. Publish Official Puzzle</h3>
-                    
+                    <h3 class="font-black text-sm mb-2 text-[#c62828]">2. Publish Drop (GIFs supported!)</h3>
                     <div class="flex items-center gap-2 mb-2">
-                        <input type="text" id="adminPuzImg" placeholder="Image URL..." class="w-full p-2 border-4 border-gray-300 rounded-lg font-bold text-sm">
+                        <input type="text" id="adminPuzImg" placeholder="Image/GIF URL..." class="w-full p-2 border-4 border-gray-300 rounded-lg font-bold text-sm bg-white text-black">
                         <span class="font-black text-xs text-gray-500">OR</span>
                         <input type="file" id="adminPuzFile" accept="image/*" class="w-full text-[0.65rem] font-bold text-gray-500 file:py-1 file:px-2 file:rounded-lg file:border-2 file:border-gray-300 file:bg-white cursor-pointer">
                     </div>
-                    
-                    <input type="text" id="adminPuzTitle" placeholder="Puzzle Title..." class="w-full p-2 border-4 border-gray-300 rounded-lg mb-2 font-bold text-sm">
+                    <input type="text" id="adminPuzTitle" placeholder="Drop Title..." class="w-full p-2 border-4 border-gray-300 rounded-lg mb-2 font-bold text-sm bg-white text-black">
                     <div class="grid grid-cols-2 gap-2 mb-2">
-                        <input type="number" id="adminPuzReward" placeholder="Reward (e.g. 50)" class="w-full p-2 border-4 border-gray-300 rounded-lg font-bold text-sm">
-                        <input type="number" id="adminPuzPrice" placeholder="Unlock Price (Coins)" class="w-full p-2 border-4 border-gray-300 rounded-lg font-bold text-sm">
+                        <input type="number" id="adminPuzReward" placeholder="Reward (e.g. 50)" class="w-full p-2 border-4 border-gray-300 rounded-lg font-bold text-sm bg-white text-black">
+                        <input type="number" id="adminPuzPrice" placeholder="Unlock Price" class="w-full p-2 border-4 border-gray-300 rounded-lg font-bold text-sm bg-white text-black">
                     </div>
                     <div class="grid grid-cols-2 gap-2 mb-2">
-                        <input type="number" id="adminPuzExpiry" placeholder="Expires in (Hours)" class="w-full p-2 border-4 border-gray-300 rounded-lg font-bold text-sm">
-                        <input type="number" id="adminPuzGrid" placeholder="Req Grid (e.g. 10)" class="w-full p-2 border-4 border-gray-300 rounded-lg font-bold text-sm">
+                        <input type="number" id="adminPuzExpiry" placeholder="Expires in (Hrs)" class="w-full p-2 border-4 border-gray-300 rounded-lg font-bold text-sm bg-white text-black">
+                        <input type="number" id="adminPuzGrid" placeholder="Req Grid (e.g. 10)" class="w-full p-2 border-4 border-gray-300 rounded-lg font-bold text-sm bg-white text-black">
                     </div>
-                    <button onclick="window.adminPublishPuzzle()" class="lofi-button btn-dark px-4 py-2 text-xs w-full">Publish Puzzle</button>
-                </div>
-
-                <div>
-                    <h3 class="font-black text-sm mb-2">3. Publish Art Pack</h3>
-                    <input type="text" id="adminPackName" placeholder="Pack Name..." class="w-full p-2 border-4 border-gray-300 rounded-lg mb-2 font-bold text-sm">
-                    <input type="number" id="adminPackPrice" placeholder="Price in Coins..." class="w-full p-2 border-4 border-gray-300 rounded-lg mb-2 font-bold text-sm">
-                    <textarea id="adminPackUrls" placeholder="Comma-separated Image URLs..." class="w-full p-2 border-4 border-gray-300 rounded-lg mb-2 font-bold text-sm h-20"></textarea>
-                    <button onclick="window.adminPublishPack()" class="lofi-button btn-dark px-4 py-2 text-xs w-full">Publish Pack</button>
+                    <button onclick="window.adminPublishPuzzle()" class="lofi-button px-4 py-2 text-xs w-full" style="background: #c62828; color: white;">Publish Drop</button>
                 </div>
             </div>
         </div>
@@ -390,39 +401,39 @@
                 <button onclick="window.closeSetupMode()" class="lofi-button btn-ghost px-3 py-1 text-sm">✕</button>
             </div>
 
-            <div id="continueContainer" class="hidden flex-col gap-2 p-4 bg-yellow-50 border-4 border-[var(--money-color)] rounded-xl relative">
-                <div class="text-sm font-black text-yellow-800 text-center">💾 Unfinished puzzle found!</div>
+            <div id="continueContainer" class="hidden flex-col gap-2 p-4 bg-[var(--money-color)] border-4 border-[var(--border-color)] rounded-xl relative">
+                <div class="text-sm font-black text-[var(--border-color)] text-center">💾 Unfinished puzzle found!</div>
                 <div class="grid grid-cols-2 gap-2 mt-1">
-                    <button id="continueBtn" class="lofi-button btn-yellow py-2 px-2 text-xs">RESUME</button>
-                    <button onclick="window.sellUnfinishedGame()" class="lofi-button bg-orange-400 text-white py-2 px-2 text-xs">SELL ON MARKET</button>
+                    <button id="continueBtn" class="lofi-button py-2 px-2 text-xs" style="background: var(--panel-bg)">RESUME</button>
+                    <button onclick="window.sellUnfinishedGame()" class="lofi-button bg-orange-400 text-[var(--panel-bg)] py-2 px-2 text-xs">SELL ON MARKET</button>
                 </div>
             </div>
 
             <div>
-                <label class="block text-sm font-black mb-2 text-gray-600">CHOOSE ARTWORK:</label>
+                <label class="block text-sm font-black mb-2 opacity-70">CHOOSE ARTWORK:</label>
                 <div class="flex gap-3 overflow-x-auto pb-4 px-1 scrollbar-hide" id="setupGallery"></div>
                 
                 <div class="relative flex items-center my-2">
-                    <div class="flex-grow border-t-4 border-dashed border-gray-200"></div>
-                    <span class="flex-shrink-0 mx-4 text-gray-400 text-xs font-black uppercase">OR UPLOAD</span>
-                    <div class="flex-grow border-t-4 border-dashed border-gray-200"></div>
+                    <div class="flex-grow border-t-4 border-dashed border-[var(--border-color)] opacity-30"></div>
+                    <span class="flex-shrink-0 mx-4 opacity-50 text-xs font-black uppercase">OR UPLOAD</span>
+                    <div class="flex-grow border-t-4 border-dashed border-[var(--border-color)] opacity-30"></div>
                 </div>
                 
-                <input type="file" id="imageInput" accept="image/*" class="block w-full text-sm font-bold text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-4 file:border-[var(--border-color)] file:text-xs file:font-black file:bg-[#e0dcd3] hover:file:bg-[#d1ccc1] cursor-pointer">
+                <input type="file" id="imageInput" accept="image/*" class="block w-full text-sm font-bold opacity-70 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-4 file:border-[var(--border-color)] file:text-xs file:font-black file:bg-[var(--bg-color)] cursor-pointer">
             </div>
 
             <div class="grid grid-cols-2 gap-4 mt-2">
                 <div>
-                    <label class="block text-xs font-black mb-1 text-gray-600">GRID SIZE: <span id="gridDisplayVal" class="text-[var(--accent-color)]">4x4</span></label>
+                    <label class="block text-xs font-black mb-1 opacity-70">GRID SIZE: <span id="gridDisplayVal" class="text-[var(--accent-color)] opacity-100">4x4</span></label>
                     <div class="flex items-center gap-2">
                         <input type="range" id="gridSlider" min="2" max="20" value="4" class="flex-grow">
-                        <input type="number" id="gridInput" value="4" min="2" max="100" class="w-16 p-1 border-4 border-[var(--border-color)] rounded bg-white text-xs font-black text-center" title="Custom up to 100">
+                        <input type="number" id="gridInput" value="4" min="2" max="100" class="w-16 p-1 border-4 border-[var(--border-color)] rounded bg-[var(--bg-color)] text-[var(--text-color)] text-xs font-black text-center" title="Custom up to 100">
                     </div>
-                    <div class="text-[0.6rem] font-bold text-gray-400 text-center mt-1">Total pieces: <span id="piecesCountDisplay">16</span></div>
+                    <div class="text-[0.6rem] font-bold opacity-50 text-center mt-1">Total pieces: <span id="piecesCountDisplay">16</span></div>
                 </div>
                 <div>
-                    <label class="block text-xs font-black mb-1 text-gray-600">SHAPE</label>
-                    <select id="pieceShape" class="w-full p-2 border-4 border-[var(--border-color)] rounded-xl bg-white text-sm font-black focus:outline-none">
+                    <label class="block text-xs font-black mb-1 opacity-70">SHAPE</label>
+                    <select id="pieceShape" class="w-full p-2 border-4 border-[var(--border-color)] rounded-xl bg-[var(--bg-color)] text-[var(--text-color)] text-sm font-black focus:outline-none">
                         <option value="square">Square</option>
                         <option value="jigsaw">Toon Jigsaw</option>
                         <option value="hexagon">Hexagon</option>
@@ -430,7 +441,7 @@
                 </div>
             </div>
 
-            <div class="flex flex-col gap-3 bg-[#fdfbf7] p-4 border-4 border-[var(--border-color)] rounded-xl mt-2">
+            <div class="flex flex-col gap-3 bg-[var(--bg-color)] p-4 border-4 border-[var(--border-color)] rounded-xl mt-2">
                 <label class="flex items-center gap-3 cursor-pointer">
                     <input id="enableRotation" type="checkbox" class="w-5 h-5 accent-[var(--accent-color)]">
                     <span class="text-sm font-black">Enable Rotation (+Coins)</span>
@@ -454,19 +465,19 @@
 
         <!-- GAMEPLAY OVERLAY -->
         <div id="viewGame" class="view-section hidden w-full flex flex-col gap-4 absolute top-0 left-0 right-0 z-40 bg-[var(--bg-color)] min-h-[90vh]">
-            <div class="lofi-box p-3 bg-white flex justify-between items-center rounded-2xl">
+            <div class="lofi-box p-3 flex justify-between items-center rounded-2xl">
                 <div class="flex gap-4 font-black text-lg text-[var(--border-color)]">
                     <div class="flex items-center gap-1">⏱ <span id="timerDisplay">00:00</span></div>
                     <div class="flex items-center gap-1">🔄 <span id="movesDisplay">0</span></div>
                 </div>
                 <div class="flex gap-2">
-                    <button id="wandBtn" class="lofi-button btn-purple px-3 py-2 text-[0.7rem] flex items-center gap-1" title="Magic Wand">
+                    <button id="wandBtn" class="lofi-button px-3 py-2 text-[0.7rem] flex items-center gap-1" style="background: #e0a2ff;" title="Magic Wand">
                         ✨ WAND
                     </button>
                     <button id="hintBtn" class="lofi-button btn-yellow px-3 py-2 text-[0.7rem] touch-none select-none">
                         👁 HINT
                     </button>
-                    <button onclick="window.confirmExit()" class="lofi-button btn-ghost px-3 py-2 text-[0.7rem]">
+                    <button onclick="window.confirmExit()" class="lofi-button btn-ghost px-3 py-2 text-[0.7rem] bg-[var(--bg-color)]">
                         EXIT
                     </button>
                 </div>
@@ -477,34 +488,46 @@
                 <img id="fullHintOverlay" src="" alt="">
             </div>
             
-            <div class="lofi-box p-3 bg-white flex items-center justify-between text-xs font-black mt-auto rounded-xl">
+            <div class="lofi-box p-3 flex items-center justify-between text-xs font-black mt-auto rounded-xl">
                 <div class="flex items-center gap-2">
                     <span class="animate-pulse text-xl">📻</span>
                     <span id="nowPlayingText">Track: 1. Rainy Days</span>
                 </div>
-                <button onclick="window.audioPlayer.nextTrack()" class="px-3 py-1 border-2 border-[var(--border-color)] bg-gray-100 rounded-lg hover:bg-gray-200 uppercase">NEXT ⏭</button>
+                <button onclick="window.audioPlayer.nextTrack()" class="px-3 py-1 border-2 border-[var(--border-color)] bg-[var(--bg-color)] rounded-lg uppercase">NEXT ⏭</button>
             </div>
         </div>
 
+    </div>
+
+    <!-- Floating Navigation Dock -->
+    <div class="floating-dock" id="floatingNav">
+        <div class="dock-btn active" data-target="viewPublic"><span class="icon">🎁</span><span class="label">Drops</span></div>
+        <div class="dock-btn text-orange-500" data-target="viewMarket"><span class="icon">🛒</span><span class="label">Market</span></div>
+        <div class="dock-btn" data-target="viewLibrary"><span class="icon">📚</span><span class="label">Library</span></div>
+        <div class="dock-btn" data-target="viewHub"><span class="icon">🧩</span><span class="label">Craft</span></div>
+        <div class="dock-btn" data-target="viewQuests"><span class="icon">🏆</span><span class="label">Quests</span></div>
+        <div class="dock-btn" data-target="viewShop"><span class="icon">📻</span><span class="label">Shop</span></div>
+        <div class="dock-btn" data-target="viewLeaders"><span class="icon">👑</span><span class="label">Ranks</span></div>
+        <div class="dock-btn hidden" id="adminDockTab" data-target="viewAdmin" style="color:#c62828;"><span class="icon">⚙️</span><span class="label">Admin</span></div>
     </div>
 
     <!-- Modals -->
 
     <!-- Library Details Modal -->
     <div id="libraryModal" class="modal-overlay hidden z-[3000]">
-        <div class="lofi-box p-6 max-w-sm w-full bg-white flex flex-col gap-4 relative">
-            <button onclick="document.getElementById('libraryModal').classList.add('hidden')" class="absolute top-2 right-2 text-xl font-black px-2">✕</button>
-            <h2 class="font-black text-xl text-center border-b-4 border-gray-100 pb-2">ART DETAILS</h2>
+        <div class="lofi-box p-6 max-w-sm w-full bg-[var(--panel-bg)] flex flex-col gap-4 relative">
+            <button onclick="document.getElementById('libraryModal').classList.add('hidden')" class="absolute top-2 right-2 text-xl font-black px-2 opacity-50">✕</button>
+            <h2 class="font-black text-xl text-center border-b-4 border-[var(--border-color)] pb-2">ART DETAILS</h2>
             <img id="libModalImg" src="" class="w-full aspect-square object-cover rounded-xl border-4 border-[var(--border-color)]">
             <div class="grid grid-cols-2 gap-2 text-center text-sm font-black">
-                <div class="bg-gray-100 p-2 rounded-lg border-2 border-gray-200">Size: <span id="libModalSize" class="text-[var(--accent-color)]"></span></div>
-                <div class="bg-gray-100 p-2 rounded-lg border-2 border-gray-200">Shape: <span id="libModalShape" class="text-[var(--accent-color)]"></span></div>
+                <div class="bg-[var(--bg-color)] p-2 rounded-lg border-2 border-[var(--border-color)]">Size: <span id="libModalSize" class="text-[var(--accent-color)]"></span></div>
+                <div class="bg-[var(--bg-color)] p-2 rounded-lg border-2 border-[var(--border-color)]">Shape: <span id="libModalShape" class="text-[var(--accent-color)]"></span></div>
             </div>
             <div class="grid grid-cols-2 gap-2 mt-2">
-                <button id="libModalReplayBtn" class="lofi-button py-3 text-sm flex justify-center items-center gap-1">
+                <button id="libModalReplayBtn" class="lofi-button py-3 text-sm flex justify-center items-center gap-1" style="background: var(--bg-color);">
                     🔄 REPLAY
                 </button>
-                <button id="libModalSellBtn" class="lofi-button bg-orange-400 text-white py-3 text-sm flex justify-center items-center gap-1">
+                <button id="libModalSellBtn" class="lofi-button bg-orange-400 text-[var(--panel-bg)] py-3 text-sm flex justify-center items-center gap-1">
                     💰 SELL
                 </button>
             </div>
@@ -513,27 +536,27 @@
 
     <!-- Sell Modal -->
     <div id="sellModal" class="modal-overlay hidden z-[3000]">
-        <div class="lofi-box p-6 max-w-sm w-full bg-white flex flex-col gap-4 relative text-center">
-            <button onclick="document.getElementById('sellModal').classList.add('hidden')" class="absolute top-2 right-2 text-xl font-black px-2">✕</button>
-            <h2 class="font-black text-xl border-b-4 border-gray-100 pb-2">SELL ON MARKET</h2>
-            <p class="text-xs font-bold text-gray-500">Set a price for this puzzle. Once sold, it will be transferred to the buyer.</p>
-            <input type="number" id="sellPriceInput" placeholder="Price in Coins (e.g. 500)" class="w-full p-3 border-4 border-[var(--border-color)] rounded-xl font-black text-center text-lg focus:outline-none focus:border-[var(--accent-color)]">
+        <div class="lofi-box p-6 max-w-sm w-full bg-[var(--panel-bg)] flex flex-col gap-4 relative text-center">
+            <button onclick="document.getElementById('sellModal').classList.add('hidden')" class="absolute top-2 right-2 text-xl font-black px-2 opacity-50">✕</button>
+            <h2 class="font-black text-xl border-b-4 border-[var(--border-color)] pb-2">SELL ON MARKET</h2>
+            <p class="text-xs font-bold opacity-70">Set a price for this puzzle. Once sold, it will be transferred to the buyer.</p>
+            <input type="number" id="sellPriceInput" placeholder="Price in Coins (e.g. 500)" class="w-full p-3 border-4 border-[var(--border-color)] rounded-xl bg-[var(--bg-color)] text-[var(--text-color)] font-black text-center text-lg focus:outline-none focus:border-[var(--accent-color)]">
             <button id="confirmSellBtn" class="lofi-button btn-green py-3">LIST ON MARKET</button>
         </div>
     </div>
 
     <!-- Result Modal -->
     <div id="resultModal" class="modal-overlay hidden z-[3000]">
-        <div class="lofi-box p-8 max-w-sm w-full text-center flex flex-col gap-4 bg-white">
+        <div class="lofi-box p-8 max-w-sm w-full text-center flex flex-col gap-4 bg-[var(--panel-bg)]">
             <h2 id="resultTitle" class="text-4xl font-black mb-1">SOLVED!</h2>
             <div class="flex justify-center flex-wrap gap-2 mb-2" id="resultBadges"></div>
             
-            <div class="text-sm font-black text-[var(--border-color)] bg-[#fdfbf7] p-3 rounded-xl border-4 border-[var(--border-color)]">
+            <div class="text-sm font-black text-[var(--border-color)] bg-[var(--bg-color)] p-3 rounded-xl border-4 border-[var(--border-color)]">
                 Time: <span id="resTime" class="text-[var(--accent-color)] text-lg">00:00</span> <br> 
                 Moves: <span id="resMoves" class="text-[var(--accent-color)] text-lg">0</span>
             </div>
 
-            <div class="text-xl font-black text-[var(--border-color)] mt-2">REWARD: <span id="resValue" class="text-[var(--money-color)] text-3xl">0</span> 🪙</div>
+            <div class="text-xl font-black text-[var(--border-color)] mt-2">REWARD: <span id="resValue" class="text-[var(--money-color)] text-3xl drop-shadow-md">0</span> 🪙</div>
 
             <div class="grid grid-cols-2 gap-4 mt-4">
                 <button onclick="window.finishGame('keep')" class="lofi-button btn-green py-4 text-sm flex flex-col items-center">
@@ -547,7 +570,7 @@
     </div>
 
     <!-- Toast -->
-    <div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-[var(--border-color)] text-white px-6 py-3 rounded-xl font-black shadow-[4px_4px_0px_#f2a29b] opacity-0 pointer-events-none transition-opacity z-[4000] text-sm flex items-center gap-3">
+    <div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-[var(--border-color)] text-[var(--panel-bg)] px-6 py-3 rounded-xl font-black shadow-[4px_4px_0px_var(--accent-color)] opacity-0 pointer-events-none transition-opacity z-[4000] text-sm flex items-center gap-3">
         <span class="text-2xl">🏆</span> <span id="toastMsg">Quest Completed!</span>
     </div>
 
@@ -575,8 +598,15 @@
         let playerProfile = {
             name: "", coins: 0, exp: 0, level: 1, role: "player", avatarUrl: "",
             unlockedTracks: [0], playlist: [0], unlockedPacks: [], unlockedPuzzles: [],
-            collection: [], completedQuests: [], hexWins: 0
+            collection: [], completedQuests: [], hexWins: 0,
+            unlockedThemes: ['default'], activeTheme: 'default'
         };
+
+        const THEMES_DB = [
+            { id: 'default', name: 'Original Vanilla', price: 0, icon: '🍦' },
+            { id: 'cyberpunk', name: 'Neon Cyberpunk', price: 2000, icon: '🚀' },
+            { id: 'retro', name: 'Retro Gameboy', price: 1500, icon: '🕹️' }
+        ];
 
         // Real MP3 Tracks Configuration
         const TRACKS_DB = [
@@ -584,7 +614,6 @@
             { id: 1, name: "Midnight Coffee", price: 500, url: "music/midnight_coffee.mp3", fx: "none" },
             { id: 2, name: "Autumn Leaves", price: 1000, url: "music/autumn_leaves.mp3", fx: "leaves" },
             { id: 3, name: "VHS Dreams", price: 1500, url: "music/vhs_dreams.mp3", fx: "none" }
-            // Add more entries here as you generate mp3 files
         ];
 
         const QUESTS_DB = [
@@ -606,15 +635,15 @@
             const preloader = document.getElementById('preloader');
             const preloaderText = document.getElementById('preloaderText');
             
-            setTimeout(() => { preloaderText.style.opacity = '1'; }, 500); // Fade in Deeproot
-            setTimeout(() => { preloaderText.style.opacity = '0'; }, 2000); // Fade out Deeproot
+            setTimeout(() => { preloaderText.style.opacity = '1'; }, 500);
+            setTimeout(() => { preloaderText.style.opacity = '0'; }, 2000);
             setTimeout(() => { 
                 preloaderText.textContent = "LO-FI RIDDLES"; 
                 preloaderText.style.opacity = '1'; 
-            }, 3000); // Fade in Lo-fi
-            setTimeout(() => { preloaderText.style.opacity = '0'; }, 4500); // Fade out Lo-fi
-            setTimeout(() => { preloader.style.opacity = '0'; }, 5000); // Fade out BG
-            setTimeout(() => { preloader.remove(); }, 6000); // Remove DOM
+            }, 3000);
+            setTimeout(() => { preloaderText.style.opacity = '0'; }, 4500);
+            setTimeout(() => { preloader.style.opacity = '0'; }, 5000);
+            setTimeout(() => { preloader.remove(); }, 6000);
         });
 
 
@@ -625,8 +654,7 @@
             init() {
                 this.audio1.loop = true; this.audio2.loop = true;
                 this.audio1.volume = 1; this.audio2.volume = 0;
-                // Preload fallback for synthesizing if MP3 missing
-                this.audio1.onerror = () => { console.warn("MP3 not found, falling back to silent/synth if implemented."); }
+                this.audio1.onerror = () => { console.warn("MP3 not found, falling back to silent/synth."); }
             },
             start() {
                 if(this.isPlaying) return; this.isPlaying = true;
@@ -652,7 +680,7 @@
                 const activeAudio = this.active === 1 ? this.audio1 : this.audio2;
                 activeAudio.src = track.url;
                 activeAudio.volume = 1;
-                activeAudio.play().catch(e => console.log("Audio play blocked (needs user interaction first)"));
+                activeAudio.play().catch(e => console.log("Audio play blocked"));
             },
             crossfadeToCurrent() {
                 const tId = playerProfile.playlist[this.currentIdx] || 0;
@@ -672,12 +700,8 @@
                 let vol = 0;
                 this.fadeInterval = setInterval(() => {
                     vol += 0.05;
-                    if(vol >= 1) {
-                        vol = 1; clearInterval(this.fadeInterval);
-                        oldAudio.pause();
-                    }
-                    newAudio.volume = vol;
-                    oldAudio.volume = 1 - vol;
+                    if(vol >= 1) { vol = 1; clearInterval(this.fadeInterval); oldAudio.pause(); }
+                    newAudio.volume = vol; oldAudio.volume = 1 - vol;
                 }, 100);
             },
             setWeather(fx) {
@@ -769,6 +793,10 @@
             }
         });
 
+        function applyTheme(themeId) {
+            document.body.className = `min-h-screen flex flex-col items-center transition-colors duration-500 theme-${themeId}`;
+        }
+
         async function syncProfile() {
             if (!currentUser || !db) return;
             const profileRef = doc(db, 'users', currentUser.uid);
@@ -776,6 +804,10 @@
             if (snap.exists() && snap.data().name) {
                 playerProfile = { ...playerProfile, ...snap.data() };
                 if(!playerProfile.unlockedPuzzles) playerProfile.unlockedPuzzles = [];
+                if(!playerProfile.unlockedThemes) playerProfile.unlockedThemes = ['default'];
+                if(!playerProfile.activeTheme) playerProfile.activeTheme = 'default';
+                
+                applyTheme(playerProfile.activeTheme);
                 authScreen.classList.add('hidden');
                 setupRealtimeListeners(); updateLeaderboardStats(); refreshUI();
             } else {
@@ -824,41 +856,43 @@
                     const isUnlocked = data.price === 0 || playerProfile.unlockedPuzzles.includes(pId);
                     const timeStr = data.expiresAt ? `<div class="text-[0.65rem] text-red-500 font-black animate-pulse bg-red-50 px-2 py-1 rounded inline-block mt-1">⏳ EXPIRES SOON!</div>` : '';
                     const sizeStr = data.forcedGridSize ? `${data.forcedGridSize}x${data.forcedGridSize}` : '4x4 (Default)';
+                    const isGif = data.imageUrl.toLowerCase().includes('.gif');
+                    const gifBadge = isGif ? `<span class="badge text-xs bg-purple-100 border-purple-300 text-purple-700">GIF</span>` : '';
 
                     grid.innerHTML += `
-                        <div class="lofi-box p-4 bg-white flex justify-between items-center cursor-pointer hover:scale-[1.02] transition-transform" 
+                        <div class="lofi-box p-4 bg-[var(--bg-color)] flex justify-between items-center cursor-pointer hover:scale-[1.02] transition-transform" 
                              onclick="window.playPublicPuzzle('${pId}', '${data.imageUrl}', ${data.baseValue}, ${data.price || 0}, ${isUnlocked}, ${data.forcedGridSize || 4})">
                             <div class="flex items-center gap-4">
-                                <img src="${data.imageUrl}" class="w-16 h-16 object-cover rounded-xl border-4 border-[var(--border-color)] shadow-[2px_2px_0px_#3d312a]">
+                                <img src="${data.imageUrl}" class="w-16 h-16 object-cover rounded-xl border-4 border-[var(--border-color)] shadow-[2px_2px_0px_var(--border-color)]">
                                 <div class="flex flex-col">
-                                    <div class="font-black text-md leading-tight">${data.title}</div>
+                                    <div class="font-black text-md leading-tight">${data.title} ${gifBadge}</div>
                                     <div class="text-xs font-bold text-[var(--accent-color)] mt-1">Reward: ${data.baseValue} 🪙 | Grid: ${sizeStr}</div>
                                     ${timeStr}
                                 </div>
                             </div>
-                            <div>${isUnlocked ? '<span class="text-3xl drop-shadow-md">▶</span>' : `<button class="lofi-button btn-yellow px-3 py-2 text-sm font-black shadow-[2px_2px_0px_#3d312a]">${data.price}🪙</button>`}</div>
+                            <div>${isUnlocked ? '<span class="text-3xl drop-shadow-md">▶</span>' : `<button class="lofi-button btn-yellow px-3 py-2 text-sm font-black">${data.price}🪙</button>`}</div>
                         </div>
                     `;
                 });
-                if(!hasActive) grid.innerHTML = '<div class="text-center font-bold text-gray-400 py-6">No active drops. Check back later!</div>';
+                if(!hasActive) grid.innerHTML = '<div class="text-center font-bold opacity-50 py-6">No active drops. Check back later!</div>';
             });
 
             // Marketplace
             onSnapshot(collection(db, 'market'), (snap) => {
                 const grid = document.getElementById('marketGrid'); grid.innerHTML = '';
-                if(snap.empty) { grid.innerHTML = '<div class="text-center font-bold text-gray-400 py-6 col-span-2">Market is quiet right now.</div>'; return; }
+                if(snap.empty) { grid.innerHTML = '<div class="text-center font-bold opacity-50 py-6 col-span-2">Market is quiet right now.</div>'; return; }
                 
                 snap.forEach(d => {
                     const data = d.data(); const mId = d.id;
                     const isMine = data.sellerId === currentUser.uid;
-                    const imgPreview = data.item.img || data.item.imageSrc; // handles complete or incomplete state images
+                    const imgPreview = data.item.img || data.item.imageSrc; 
                     const sizeText = data.item.state ? "UNFINISHED" : "COMPLETED";
                     
                     grid.innerHTML += `
-                        <div class="lofi-box p-3 bg-white flex flex-col justify-between items-center shadow-[4px_4px_0px_rgba(0,0,0,0.1)]">
-                            <img src="${imgPreview}" class="w-full aspect-square object-cover rounded-lg border-2 border-gray-200 mb-2">
+                        <div class="lofi-box p-3 bg-[var(--bg-color)] flex flex-col justify-between items-center shadow-[4px_4px_0px_rgba(0,0,0,0.1)]">
+                            <img src="${imgPreview}" class="w-full aspect-square object-cover rounded-lg border-2 border-[var(--border-color)] opacity-80 mb-2">
                             <div class="w-full flex justify-between items-center text-xs font-black mb-2">
-                                <span class="text-gray-500 truncate mr-2">@${data.seller}</span>
+                                <span class="opacity-70 truncate mr-2">@${data.seller}</span>
                                 <span class="text-orange-500">${sizeText}</span>
                             </div>
                             ${isMine ? 
@@ -870,20 +904,20 @@
                 });
             });
 
-            // Leaderboard & Artpacks (Standard listeners)
+            // Leaderboard
             onSnapshot(collection(db, 'public_data', 'leaderboard', 'users'), (snap) => {
                 let players = []; snap.forEach(d => players.push(d.data())); players.sort((a,b) => b.exp - a.exp);
                 const list = document.getElementById('leaderboardList'); list.innerHTML = '';
                 players.slice(0, 50).forEach((p, i) => {
                     const isMe = p.name === playerProfile.name;
                     list.innerHTML += `
-                        <div class="flex justify-between items-center p-3 border-b-4 border-gray-100 ${isMe?'bg-[#e8f5e9]':''} text-sm">
+                        <div class="flex justify-between items-center p-3 border-b-4 border-[var(--border-color)] ${isMe?'opacity-100':'opacity-80'} text-sm">
                             <div class="flex items-center gap-3">
-                                <span class="text-gray-400 w-4 font-black">${i+1}.</span>
+                                <span class="opacity-50 w-4 font-black">${i+1}.</span>
                                 <img src="${p.avatarUrl || `https://api.dicebear.com/7.x/micah/svg?seed=${p.name}`}" class="w-8 h-8 rounded-full border-2 border-[var(--border-color)] bg-white">
                                 <span class="font-black">${p.name}</span>
                             </div>
-                            <div class="text-xs font-black text-[var(--exp-color)]">LVL ${p.level} <span class="text-gray-400">(${p.exp} xp)</span></div>
+                            <div class="text-xs font-black text-[var(--exp-color)]">LVL ${p.level} <span class="opacity-50">(${p.exp} xp)</span></div>
                         </div>
                     `;
                 });
@@ -891,13 +925,13 @@
 
             onSnapshot(collection(db, 'artpacks'), (snap) => {
                 const list = document.getElementById('artPackList'); list.innerHTML = '';
-                if(snap.empty) list.innerHTML = '<div class="text-sm font-bold text-gray-400">No packs available.</div>';
+                if(snap.empty) list.innerHTML = '<div class="text-sm font-bold opacity-50">No packs available.</div>';
                 snap.forEach(docSnap => {
                     const data = docSnap.data(); const packId = docSnap.id;
                     const isUnlocked = playerProfile.unlockedPacks.includes(packId);
                     list.innerHTML += `
-                        <div class="p-4 border-4 rounded-xl border-[var(--border-color)] bg-[#fdfbf7] flex justify-between items-center shadow-[4px_4px_0px_rgba(0,0,0,0.1)]">
-                            <div><div class="font-black text-md text-[var(--border-color)]">${data.name}</div><div class="text-xs font-bold text-gray-500">${data.images.length} exclusive images</div></div>
+                        <div class="p-4 border-4 rounded-xl border-[var(--border-color)] bg-[var(--bg-color)] flex justify-between items-center shadow-[4px_4px_0px_rgba(0,0,0,0.1)]">
+                            <div><div class="font-black text-md text-[var(--border-color)]">${data.name}</div><div class="text-xs font-bold opacity-70">${data.images.length} exclusive images</div></div>
                             ${isUnlocked ? `<span class="badge">UNLOCKED</span>` : `<button onclick="window.buyPack('${packId}', ${data.price})" class="lofi-button btn-yellow px-3 py-2 text-xs">Buy ${data.price}🪙</button>`}
                         </div>
                     `;
@@ -907,15 +941,16 @@
             });
         }
 
-        // --- UI & NAVIGATION ---
-        document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
+        // --- FLOATING UI NAVIGATION ---
+        document.querySelectorAll('.dock-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.dock-btn').forEach(t => t.classList.remove('active'));
+                btn.classList.add('active');
                 document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-                document.getElementById(tab.dataset.target).classList.remove('hidden');
-                if(tab.dataset.target === 'viewShop') renderShop();
-                if(tab.dataset.target === 'viewQuests') renderQuests();
+                document.getElementById(btn.dataset.target).classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if(btn.dataset.target === 'viewShop') renderShop();
+                if(btn.dataset.target === 'viewQuests') renderQuests();
             });
         });
 
@@ -946,7 +981,7 @@
             document.getElementById('playerLvl').textContent = playerProfile.level;
             
             if(playerProfile.role === 'publisher' || playerProfile.role === 'admin') {
-                document.getElementById('adminTab').classList.remove('hidden');
+                document.getElementById('adminDockTab').classList.remove('hidden');
             }
 
             // Render Library
@@ -954,16 +989,16 @@
             document.getElementById('collectionCount').textContent = `${playerProfile.collection.length}`;
             
             if(playerProfile.collection.length === 0) {
-                grid.innerHTML = '<div class="text-sm font-bold text-gray-400 col-span-full text-center py-6">Gallery is empty. Play to collect!</div>';
+                grid.innerHTML = '<div class="text-sm font-bold opacity-50 col-span-full text-center py-6">Gallery is empty. Play to collect!</div>';
             } else {
                 playerProfile.collection.forEach((item, idx) => {
                     const randRot = Math.random();
                     grid.innerHTML += `
                         <div class="polaroid" style="--rand: ${randRot}" onclick="window.openLibraryItem(${idx})">
-                            <div class="w-full aspect-square overflow-hidden border-2 border-gray-200 rounded">
+                            <div class="w-full aspect-square overflow-hidden border-2 border-[var(--border-color)] rounded">
                                 <img src="${item.img || item.imageSrc}" class="w-full h-full object-cover">
                             </div>
-                            <div class="text-center mt-2 font-black text-xs text-gray-600">${item.diff}x${item.diff} ${item.wand ? '✨' : ''}</div>
+                            <div class="text-center mt-2 font-black text-xs opacity-70">${item.diff}x${item.diff} ${item.wand ? '✨' : ''}</div>
                         </div>
                     `;
                 });
@@ -983,7 +1018,6 @@
             document.getElementById('libModalReplayBtn').onclick = () => {
                 document.getElementById('libraryModal').classList.add('hidden');
                 
-                // If it's an unfinished market item bought, resume it instead of replay
                 if(item.state) {
                     Object.assign(gameState, item.state); handleImageSelection(gameState.imageSrc);
                     const waitForImg = setInterval(() => { if (originalImage) { clearInterval(waitForImg); window.closeSetupMode(); initGame(false, item.pieceStates); } }, 50);
@@ -997,7 +1031,7 @@
                         gameState.gridSize = item.diff; gameState.shape = item.shape || 'square';
                         gameState.useRotation = false; gameState.blockHint = false;
                         gameState.isSurvival = false; gameState.wandUsed = false; gameState.hintsUsed = 0; 
-                        gameState.baseValueOverride = 0; // No reward for replays
+                        gameState.baseValueOverride = 0;
                         initGame(true);
                     }
                 }, 100);
@@ -1028,7 +1062,7 @@
                 const savedStr = localStorage.getItem('lofiGameSave');
                 if(!savedStr) return;
                 itemToSell = JSON.parse(savedStr);
-                itemToSell.diff = itemToSell.state.gridSize; // For UI preview
+                itemToSell.diff = itemToSell.state.gridSize; 
                 localStorage.removeItem('lofiGameSave');
                 document.getElementById('continueContainer').classList.add('hidden');
             } else {
@@ -1069,7 +1103,7 @@
                 const docRef = doc(db, 'market', mId);
                 const docSnap = await getDoc(docRef);
                 if(docSnap.exists() && docSnap.data().sellerId === currentUser.uid) {
-                    playerProfile.collection.push(docSnap.data().item); // Return to collection
+                    playerProfile.collection.push(docSnap.data().item);
                     await deleteDoc(docRef);
                     await saveProfile();
                     showToast("Removed from market.");
@@ -1091,6 +1125,27 @@
         };
 
         function renderShop() {
+            // Render Themes
+            const themeList = document.getElementById('themeList'); themeList.innerHTML = '';
+            THEMES_DB.forEach(t => {
+                const isUnlocked = playerProfile.unlockedThemes.includes(t.id);
+                const isActive = playerProfile.activeTheme === t.id;
+                let btn = '';
+                if (!isUnlocked) {
+                    const canBuy = playerProfile.coins >= t.price;
+                    btn = `<button onclick="window.buyTheme('${t.id}', ${t.price})" class="lofi-button px-3 py-1 text-xs ${canBuy?'btn-yellow':'opacity-50'}" ${canBuy?'':'disabled'}>${t.price}🪙</button>`;
+                } else {
+                    if (isActive) btn = `<button class="px-3 py-1 text-xs font-black text-white border-4 border-[var(--exp-color)] bg-[var(--exp-color)] rounded-xl" disabled>EQUIPPED</button>`;
+                    else btn = `<button onclick="window.equipTheme('${t.id}')" class="px-3 py-1 text-xs font-black text-[var(--border-color)] border-4 border-[var(--border-color)] bg-[var(--bg-color)] rounded-xl hover:bg-gray-100">EQUIP</button>`;
+                }
+                themeList.innerHTML += `
+                    <div class="p-3 border-b-4 border-[var(--border-color)] border-opacity-20 flex justify-between items-center ${isUnlocked ? '' : 'opacity-70'}">
+                        <div class="text-sm font-black flex items-center gap-2"><span>${t.icon}</span> ${t.name}</div><div>${btn}</div>
+                    </div>
+                `;
+            });
+
+            // Render Tracks
             const list = document.getElementById('trackList'); list.innerHTML = '';
             TRACKS_DB.forEach(track => {
                 const isUnlocked = playerProfile.unlockedTracks.includes(track.id);
@@ -1105,8 +1160,8 @@
                 }
                 const fxIcon = track.fx === 'rain' ? '🌧' : (track.fx === 'leaves' ? '🍂' : '✨');
                 list.innerHTML += `
-                    <div class="p-3 border-b-4 border-gray-100 flex justify-between items-center ${isUnlocked ? '' : 'opacity-70'}">
-                        <div class="text-sm font-black text-gray-700 flex items-center gap-2"><span>${fxIcon}</span> ${track.name}</div><div>${btn}</div>
+                    <div class="p-3 border-b-4 border-[var(--border-color)] border-opacity-20 flex justify-between items-center ${isUnlocked ? '' : 'opacity-70'}">
+                        <div class="text-sm font-black flex items-center gap-2"><span>${fxIcon}</span> ${track.name}</div><div>${btn}</div>
                     </div>
                 `;
             });
@@ -1117,8 +1172,8 @@
             QUESTS_DB.forEach(q => {
                 const isDone = playerProfile.completedQuests.includes(q.id);
                 list.innerHTML += `
-                    <div class="p-4 border-4 rounded-xl ${isDone ? 'border-[var(--exp-color)] bg-[#e8f5e9]' : 'border-[var(--border-color)] bg-white'} flex justify-between items-center shadow-[4px_4px_0px_rgba(0,0,0,0.1)]">
-                        <div><div class="font-black text-sm text-[var(--border-color)]">${q.desc}</div><div class="text-xs font-black text-[var(--money-color)] mt-1">Reward: ${q.reward} 🪙</div></div>
+                    <div class="p-4 border-4 rounded-xl ${isDone ? 'border-[var(--exp-color)] bg-[var(--bg-color)]' : 'border-[var(--border-color)] bg-[var(--panel-bg)]'} flex justify-between items-center shadow-[4px_4px_0px_rgba(0,0,0,0.1)]">
+                        <div><div class="font-black text-sm text-[var(--border-color)]">${q.desc}</div><div class="text-xs font-black text-[var(--money-color)] mt-1 drop-shadow-sm">Reward: ${q.reward} 🪙</div></div>
                         <div class="text-2xl drop-shadow-sm">${isDone ? '✅' : '⏳'}</div>
                     </div>
                 `;
@@ -1142,6 +1197,13 @@
                 }
             }
         }
+
+        window.buyTheme = (id, price) => {
+            if(playerProfile.coins >= price) { playerProfile.coins -= price; playerProfile.unlockedThemes.push(id); playerProfile.activeTheme = id; applyTheme(id); saveProfile(); renderShop(); showToast("Theme Unlocked!"); }
+        };
+        window.equipTheme = (id) => {
+            playerProfile.activeTheme = id; applyTheme(id); saveProfile(); renderShop();
+        };
 
         window.buyTrack = (id, price) => {
             if(playerProfile.coins >= price) { playerProfile.coins -= price; playerProfile.unlockedTracks.push(id); playerProfile.playlist.push(id); saveProfile(); renderShop(); }
@@ -1183,13 +1245,20 @@
         };
 
         function resizeImage(imgSrc, callback) {
+            // GIF bypass
+            if(imgSrc.toLowerCase().includes('.gif') || imgSrc.startsWith('data:image/gif')) {
+                const img = new Image(); img.crossOrigin = "anonymous";
+                img.onload = () => callback(imgSrc, img.width/img.height);
+                img.src = imgSrc;
+                return;
+            }
+
             const img = new Image(); img.crossOrigin = "anonymous";
             img.onload = () => {
                 const maxDim = 1600; let w = img.width, h = img.height;
                 if (w > maxDim || h > maxDim) { const ratio = Math.min(maxDim/w, maxDim/h); w *= ratio; h *= ratio; }
                 const canvas = document.createElement('canvas'); canvas.width = w; canvas.height = h; const ctx = canvas.getContext('2d');
                 ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(img, 0, 0, w, h);
-                // Changed to PNG for much better piece quality and lossless edges
                 callback(canvas.toDataURL('image/png'), w/h);
             }; img.src = imgSrc;
         }
@@ -1258,8 +1327,7 @@
             if(confirm("Exit? Progress is saved.")) {
                 isGameActive = false; clearInterval(timerInterval); 
                 saveLocalState(); document.getElementById('viewGame').classList.add('hidden');
-                // Auto switch back to previous tab
-                document.querySelector('.nav-tab.active').click();
+                document.querySelector('.dock-btn.active').click();
             }
         };
 
@@ -1283,24 +1351,22 @@
             updateUIStats(); createPuzzle(savedStates); startTimer(); isGameActive = true; if(isNew) saveLocalState();
         }
 
-        // Precise Jigsaw Path
-        function drawJigsawPath(ctx, w, h, t, r, b, l, tSize) {
-            ctx.beginPath(); ctx.moveTo(tSize, tSize);
-            if (t===0) ctx.lineTo(w+tSize, tSize); 
-            else { const cx=tSize+w/2; ctx.lineTo(cx-tSize*0.5, tSize); ctx.bezierCurveTo(cx-tSize*0.3, tSize-t*tSize*0.9, cx-tSize*0.7, tSize-t*tSize*1.1, cx, tSize-t*tSize*1.3); ctx.bezierCurveTo(cx+tSize*0.7, tSize-t*tSize*1.1, cx+tSize*0.3, tSize-t*tSize*0.9, cx+tSize*0.5, tSize); ctx.lineTo(w+tSize, tSize); }
-            if (r===0) ctx.lineTo(w+tSize, h+tSize); 
-            else { const cy=tSize+h/2; ctx.lineTo(w+tSize, cy-tSize*0.5); ctx.bezierCurveTo(w+tSize+r*tSize*0.9, cy-tSize*0.3, w+tSize+r*tSize*1.1, cy-tSize*0.7, w+tSize+r*tSize*1.3, cy); ctx.bezierCurveTo(w+tSize+r*tSize*1.1, cy+tSize*0.7, w+tSize+r*tSize*0.9, cy+tSize*0.3, w+tSize, cy+tSize*0.5); ctx.lineTo(w+tSize, h+tSize); }
-            if (b===0) ctx.lineTo(tSize, h+tSize); 
-            else { const cx=tSize+w/2; ctx.lineTo(cx+tSize*0.5, h+tSize); ctx.bezierCurveTo(cx+tSize*0.3, h+tSize+b*tSize*0.9, cx+tSize*0.7, h+tSize+b*tSize*1.1, cx, h+tSize+b*tSize*1.3); ctx.bezierCurveTo(cx-tSize*0.7, h+tSize+b*tSize*1.1, cx-tSize*0.3, h+tSize+b*tSize*0.9, cx-tSize*0.5, h+tSize); ctx.lineTo(tSize, h+tSize); }
-            if (l===0) ctx.lineTo(tSize, tSize); 
-            else { const cy=tSize+h/2; ctx.lineTo(tSize, cy+tSize*0.5); ctx.bezierCurveTo(tSize-l*tSize*0.9, cy+tSize*0.3, tSize-l*tSize*1.1, cy+tSize*0.7, tSize-l*tSize*1.3, cy); ctx.bezierCurveTo(tSize-l*tSize*1.1, cy-tSize*0.7, tSize-l*tSize*0.9, cy-tSize*0.3, tSize, cy-tSize*0.5); ctx.lineTo(tSize, tSize); }
-            ctx.closePath();
+        // SVG Path Generators for precise rendering
+        function getJigsawPathStr(w, h, t, r, b, l, tSize) {
+            let d = `M ${tSize} ${tSize} `;
+            if (t === 0) d += `L ${w+tSize} ${tSize} `;
+            else { const cx = tSize+w/2; d += `L ${cx-tSize*0.5} ${tSize} C ${cx-tSize*0.3} ${tSize-t*tSize*0.9}, ${cx-tSize*0.7} ${tSize-t*tSize*1.1}, ${cx} ${tSize-t*tSize*1.3} C ${cx+tSize*0.7} ${tSize-t*tSize*1.1}, ${cx+tSize*0.3} ${tSize-t*tSize*0.9}, ${cx+tSize*0.5} ${tSize} L ${w+tSize} ${tSize} `; }
+            if (r === 0) d += `L ${w+tSize} ${h+tSize} `;
+            else { const cy = tSize+h/2; d += `L ${w+tSize} ${cy-tSize*0.5} C ${w+tSize+r*tSize*0.9} ${cy-tSize*0.3}, ${w+tSize+r*tSize*1.1} ${cy-tSize*0.7}, ${w+tSize+r*tSize*1.3} ${cy} C ${w+tSize+r*tSize*1.1} ${cy+tSize*0.7}, ${w+tSize+r*tSize*0.9} ${cy+tSize*0.3}, ${w+tSize} ${cy+tSize*0.5} L ${w+tSize} ${h+tSize} `; }
+            if (b === 0) d += `L ${tSize} ${h+tSize} `;
+            else { const cx = tSize+w/2; d += `L ${cx+tSize*0.5} ${h+tSize} C ${cx+tSize*0.3} ${h+tSize+b*tSize*0.9}, ${cx+tSize*0.7} ${h+tSize+b*tSize*1.1}, ${cx} ${h+tSize+b*tSize*1.3} C ${cx-tSize*0.7} ${h+tSize+b*tSize*1.1}, ${cx-tSize*0.3} ${h+tSize+b*tSize*0.9}, ${cx-tSize*0.5} ${h+tSize} L ${tSize} ${h+tSize} `; }
+            if (l === 0) d += `L ${tSize} ${tSize} Z`;
+            else { const cy = tSize+h/2; d += `L ${tSize} ${cy+tSize*0.5} C ${tSize-l*tSize*0.9} ${cy+tSize*0.3}, ${tSize-l*tSize*1.1} ${cy+tSize*0.7}, ${tSize-l*tSize*1.3} ${cy} C ${tSize-l*tSize*1.1} ${cy-tSize*0.7}, ${tSize-l*tSize*0.9} ${cy-tSize*0.3}, ${tSize} ${cy-tSize*0.5} L ${tSize} ${tSize} Z`; }
+            return d;
         }
 
-        // Precise Hex Path
-        function drawHexPath(ctx, w, h) { 
-            ctx.beginPath(); ctx.moveTo(w*0.5, 0); ctx.lineTo(w, h*0.25); ctx.lineTo(w, h*0.75); ctx.lineTo(w*0.5, h); ctx.lineTo(0, h*0.75); ctx.lineTo(0, h*0.25); ctx.closePath(); 
-        }
+        function getHexPathStr(w, h) { return `M ${w*0.5} 0 L ${w} ${h*0.25} L ${w} ${h*0.75} L ${w*0.5} ${h} L 0 ${h*0.75} L 0 ${h*0.25} Z`; }
+        function getSquarePathStr(w, h) { return `M 0 0 L ${w} 0 L ${w} ${h} L 0 ${h} Z`; }
 
         function createPuzzle(savedStates) {
             gameState.pieces = []; const container = document.getElementById('puzzleContainer');
@@ -1309,6 +1375,7 @@
             const imgW = originalImage.width / gameState.gridSize, imgH = originalImage.height / gameState.gridSize;
             const pcSize = 100 / gameState.gridSize;
             const isJigsaw = gameState.shape === 'jigsaw'; 
+            const isGif = gameState.imageSrc.toLowerCase().includes('.gif') || gameState.imageSrc.startsWith('data:image/gif');
             
             const tabSize = isJigsaw ? Math.min(imgW, imgH) * 0.22 : 0; 
             const pcTabX = isJigsaw ? (tabSize/originalImage.width)*100 : 0, pcTabY = isJigsaw ? (tabSize/originalImage.height)*100 : 0;
@@ -1318,31 +1385,39 @@
 
             for(let r=0; r<gameState.gridSize; r++){
                 for(let c=0; c<gameState.gridSize; c++){
-                    const cvs = document.createElement('canvas'); cvs.className='puzzle-piece';
-                    cvs.width = imgW + tabSize*2; cvs.height = imgH + tabSize*2; const ctx = cvs.getContext('2d');
-                    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
-
-                    if(isJigsaw){
+                    const cvsW = imgW + tabSize*2; const cvsH = imgH + tabSize*2;
+                    let pathStr = "";
+                    
+                    if(isJigsaw) {
                         const tEdge = r===0?0:-hEdges[r-1][c], bEdge = r===gameState.gridSize-1?0:hEdges[r][c];
                         const lEdge = c===0?0:-vEdges[r][c-1], rEdge = c===gameState.gridSize-1?0:vEdges[r][c];
-                        
-                        ctx.save(); drawJigsawPath(ctx, imgW, imgH, tEdge, rEdge, bEdge, lEdge, tabSize); ctx.clip();
-                        ctx.drawImage(originalImage, c*imgW-tabSize, r*imgH-tabSize, cvs.width, cvs.height, 0, 0, cvs.width, cvs.height);
-                        ctx.restore(); 
-                        ctx.lineWidth = Math.max(1, imgW*0.015); ctx.strokeStyle = "rgba(61,49,42,0.6)";
-                        drawJigsawPath(ctx, imgW, imgH, tEdge, rEdge, bEdge, lEdge, tabSize); ctx.stroke();
-                    } else if(gameState.shape === 'hexagon') {
-                        ctx.save(); drawHexPath(ctx, cvs.width, cvs.height); ctx.clip();
-                        ctx.drawImage(originalImage, c*imgW, r*imgH, imgW, imgH, 0, 0, cvs.width, cvs.height);
-                        ctx.restore(); ctx.lineWidth = Math.max(2, imgW*0.02); ctx.strokeStyle = "rgba(61,49,42,0.8)";
-                        drawHexPath(ctx, cvs.width, cvs.height); ctx.stroke();
+                        pathStr = getJigsawPathStr(imgW, imgH, tEdge, rEdge, bEdge, lEdge, tabSize);
+                    } else if (gameState.shape === 'hexagon') { pathStr = getHexPathStr(cvsW, cvsH); } 
+                    else { pathStr = getSquarePathStr(cvsW, cvsH); }
+
+                    let el;
+                    if (isGif) {
+                        el = document.createElement('div'); el.className = 'puzzle-piece';
+                        const pid = `pat-${r}-${c}`;
+                        el.innerHTML = `<svg viewBox="0 0 ${cvsW} ${cvsH}" width="100%" height="100%" style="overflow:visible;">
+                            <defs><pattern id="${pid}" patternUnits="userSpaceOnUse" width="${originalImage.width}" height="${originalImage.height}">
+                                <image href="${gameState.imageSrc}" x="${-(c*imgW-tabSize)}" y="${-(r*imgH-tabSize)}" width="${originalImage.width}" height="${originalImage.height}" />
+                            </pattern></defs>
+                            <path d="${pathStr}" fill="url(#${pid})" stroke="rgba(61,49,42,0.6)" stroke-width="${Math.max(1, imgW*0.015)}" />
+                        </svg>`;
                     } else {
-                        ctx.drawImage(originalImage, c*imgW, r*imgH, imgW, imgH, 0, 0, cvs.width, cvs.height);
-                        ctx.lineWidth = Math.max(2, imgW*0.02); ctx.strokeStyle = "rgba(61,49,42,0.8)"; ctx.strokeRect(0,0,cvs.width,cvs.height);
+                        el = document.createElement('canvas'); el.className = 'puzzle-piece';
+                        el.width = cvsW; el.height = cvsH; const ctx = el.getContext('2d');
+                        ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+                        const p2d = new Path2D(pathStr);
+                        ctx.save(); ctx.clip(p2d);
+                        ctx.drawImage(originalImage, c*imgW-tabSize, r*imgH-tabSize, cvsW, cvsH, 0, 0, cvsW, cvsH);
+                        ctx.restore();
+                        ctx.lineWidth = Math.max(1, imgW*0.015); ctx.strokeStyle = "rgba(61,49,42,0.8)"; ctx.stroke(p2d);
                     }
 
-                    cvs.style.width = `${pcSize + pcTabX*2}%`; cvs.style.height = `${pcSize + pcTabY*2}%`;
-                    gameState.pieces.push({ id: r*gameState.gridSize+c, originalCol: c, originalRow: r, currentCol: c, currentRow: r, currentRotation: 0, isPlaced: false, element: cvs, offsetX: pcTabX, offsetY: pcTabY });
+                    el.style.width = `${pcSize + pcTabX*2}%`; el.style.height = `${pcSize + pcTabY*2}%`;
+                    gameState.pieces.push({ id: r*gameState.gridSize+c, originalCol: c, originalRow: r, currentCol: c, currentRow: r, currentRotation: 0, isPlaced: false, element: el, offsetX: pcTabX, offsetY: pcTabY });
                 }
             }
             if(savedStates) {
@@ -1504,8 +1579,8 @@
                 document.getElementById('resValue').textContent = gameState.calculatedValue;
                 
                 const bdgs = document.getElementById('resultBadges'); bdgs.innerHTML = '';
-                if(gameState.baseValueOverride === 0 && !gameState.wandUsed) bdgs.innerHTML += `<span class="badge text-gray-500">REPLAY NO REWARD</span>`;
-                if(gameState.wandUsed) bdgs.innerHTML += `<span class="badge text-purple-600 border-purple-600">✨ MAGIC USED = 0 🪙</span>`;
+                if(gameState.baseValueOverride === 0 && !gameState.wandUsed) bdgs.innerHTML += `<span class="badge opacity-50">REPLAY NO REWARD</span>`;
+                if(gameState.wandUsed) bdgs.innerHTML += `<span class="badge" style="color:#bc13fe; border-color:#bc13fe;">✨ MAGIC USED = 0 🪙</span>`;
                 if(gameState.blockHint) bdgs.innerHTML += `<span class="badge text-red-600 border-red-600">NO HINTS</span>`;
                 if(gameState.isSurvival) bdgs.innerHTML += `<span class="badge text-orange-600 border-orange-600">SURVIVAL</span>`;
                 
@@ -1531,7 +1606,7 @@
                 }
             }
             document.getElementById('viewGame').classList.add('hidden');
-            document.querySelector('.nav-tab.active').click();
+            document.querySelector('.dock-btn.active').click();
         };
 
         // --- ADMIN PUBLISHING ---
